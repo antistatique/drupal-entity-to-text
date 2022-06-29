@@ -1,0 +1,5 @@
+name: Entity to Text
+type: module
+description: 'Provides a number of utility and helper APIs for developers to transform content into plain text.'
+package: Search
+core_version_requirement: ^9.2 || ^10

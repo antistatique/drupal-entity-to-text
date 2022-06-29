@@ -1,0 +1,71 @@
+name: Code styles
+on: [push]
+
+jobs:
+  phpcs:
+    name: phpcs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mbstring, intl, gd, xml, dom, json, fileinfo, curl, zip, iconv
+          tools: cs2pr, composer:v2
+      - uses: actions/checkout@master
+      - run: composer install --prefer-dist
+      - run: ./vendor/bin/phpcs ./ --report=checkstyle | cs2pr
+
+  phpmd:
+    name: phpmd
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mbstring, intl, gd, xml, dom, json, fileinfo, curl, zip, iconv
+          tools: cs2pr, composer:v2, phpmd
+      - uses: actions/checkout@master
+      - run: composer install --prefer-dist
+      - run: phpmd ./ text ./phpmd.xml --suffixes php,module,inc,install,test,profile,theme,css,info,txt --exclude *Test.php,*vendor/*
+
+  phpcpd:
+    name: phpcpd
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mbstring, intl, gd, xml, dom, json, fileinfo, curl, zip, iconv
+          tools: cs2pr, composer:v2, phpcpd
+      - uses: actions/checkout@master
+      - run: composer install --prefer-dist
+      - run: phpcpd ./src --suffix .php --suffix .module --suffix .inc --suffix .install --suffix .test --suffix .profile --suffix .theme --suffix .css --suffix .info --suffix .txt --exclude *.md --exclude *.info.yml --exclude tests --exclude vendor/
+
+  phpdd:
+    name: PhpDeprecationDetector (phpdd)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - run: docker-compose -f docker-compose.yml pull --include-deps drupal
+      - uses: satackey/action-docker-layer-caching@v0.0.8
+      - name: Build the docker-compose stack
+        run: docker-compose -f docker-compose.yml build drupal
+      - name: Run phpdd
+        run: docker-compose run drupal phpdd ./web/modules/contrib/entity_to_text/ --file-extensions php,module,inc,install,test,profile,theme,info --exclude vendor
+
+  drupal-check:
+    name: drupal-check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mbstring, intl, gd, xml, dom, json, fileinfo, curl, zip, iconv
+          tools: composer:v2, cs2pr
+      - uses: actions/checkout@master
+      - run: composer install --no-progress --prefer-dist
+      - run: ./vendor/bin/drupal-check -dvvv ./  --format=checkstyle --exclude-dir=vendor --no-progress | cs2pr

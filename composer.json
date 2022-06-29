@@ -1,0 +1,35 @@
+{
+  "name": "drupal/entity_to_text",
+  "description": "Provides a number of utility and helper APIs for developers to transform content into plain text.",
+  "type": "drupal-module",
+  "homepage": "https://www.drupal.org/project/entity_to_text",
+  "authors": [
+    {
+      "name": "Antistatique",
+      "email": "info@antistatique.net",
+      "homepage": "https://www.antistatique.net",
+      "role": "Sponsor"
+    },
+    {
+      "name": "Kevin Wenger",
+      "email": "contact@kevin-wenger.ch",
+      "homepage": "https://www.drupal.org/u/wengerk",
+      "role": "Author & Maintainer"
+    }
+  ],
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/entity_to_text"
+  },
+  "license": "GPL-2.0-or-later",
+  "require": {
+    "ezyang/htmlpurifier": "^4.14"
+  },
+  "require-dev": {
+    "drupal/coder": "^8.3.1"
+  },
+  "config": {
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    }
+  }
+}

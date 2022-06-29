@@ -1,0 +1,16 @@
+services:
+
+  # Event subscriber to reroute companies sectors terms to the companies collection
+  entity_to_text.htmlpurifier:
+    class: Drupal\entity_to_text\HtmlPurifier
+    arguments:
+      - '@file_system'
+
+  # Extractor
+  entity_to_text.extractor.node_to_text:
+    class: Drupal\entity_to_text\Extractor\NodeToText
+    arguments:
+      - '@entity_to_text.htmlpurifier'
+      - '@renderer'
+      - '@plugin.manager.field.field_type'
+

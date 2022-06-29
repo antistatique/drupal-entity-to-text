@@ -1,0 +1,9 @@
+services:
+
+  # Extractor
+  entity_to_text_paragraphs.extractor.paragraphs_to_text:
+    class: Drupal\entity_to_text_paragraphs\Extractor\ParagraphsToText
+    arguments:
+      - '@entity_to_text.htmlpurifier'
+      - '@renderer'
+      - '@entity_type.manager'

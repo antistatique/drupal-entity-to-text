@@ -1,0 +1,7 @@
+name: Entity to Text - Paragraphs
+type: module
+description: 'Provides the utility APIs to transforms Paragraphs to Text.'
+package: Search
+core_version_requirement: ^9.2 || ^10
+dependencies:
+  - entity_to_text:entity_to_text

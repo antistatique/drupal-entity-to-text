@@ -1,0 +1,9 @@
+services:
+
+  # Extractor
+  entity_to_text_tika.extractor.file_to_text:
+    class: Drupal\entity_to_text_tika\Extractor\FileToText
+    arguments:
+      - '@settings'
+      - '@file_system'
+      - '@logger.factory'
