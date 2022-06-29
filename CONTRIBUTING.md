@@ -62,7 +62,6 @@ The following Analyzer will be downloaded & installed as PHAR:
 - `phpmd/phpmd`
 - `sebastian/phpcpd`
 - `wapmorgan/PhpDeprecationDetector`
-- `mglaman/drupal-check`
 - `vimeo/psalm`
 
 ### Command Line Usage
@@ -131,19 +130,4 @@ A scanner that checks compatibility of your code with PHP interpreter versions.
   ```
   $ docker-compose exec dev phpdd ./web/modules/custom ./behat \
     --file-extensions php,module,inc,install,test,profile,theme,info --exclude vendor
-  ```
-
-#### Running Drupal-Check
-
-https://github.com/mglaman/drupal-check
-
-Built on PHPStan, this static analysis tool will check for correctness (e.g. using a class that doesn't exist),
-deprecation errors, and more.
-
-While there are many static analysis tools out there, none of them run with the Drupal context in mind.
-This allows checking contrib modules for deprecation errors thrown by core.
-
-  ```
-  $ docker-compose exec dev drupal-check -d ./web/modules/contrib/entity_to_text/ \
-    --no-progress
   ```

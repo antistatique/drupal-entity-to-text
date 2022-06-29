@@ -49,9 +49,3 @@ RUN set -eux; \
   curl -LJO https://github.com/wapmorgan/PhpDeprecationDetector/releases/download/2.0.24/phpcf-2.0.24.phar; \
   chmod +x phpcf-2.0.24.phar; \
   mv phpcf-2.0.24.phar /usr/bin/phpdd
-
-# Download & install Drupal Check.
-RUN set -eux; \
-  curl -O -L https://github.com/mglaman/drupal-check/releases/download/latest/drupal-check.phar; \
-  chmod +x drupal-check.phar; \
-  mv drupal-check.phar /usr/bin/drupal-check
