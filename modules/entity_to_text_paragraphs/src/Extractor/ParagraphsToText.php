@@ -56,7 +56,7 @@ class ParagraphsToText {
     /** @var \Drupal\entity_reference_revisions\Plugin\Field\FieldType\EntityReferenceRevisionsItem $paragraph_item */
     foreach ($paragraph_items as $paragraph_item) {
       /** @var \Drupal\paragraphs\Entity\Paragraph $paragraph */
-      $paragraph = $paragraph_item->get('entity');
+      $paragraph = $paragraph_item->entity;
 
       $render_controller = $this->entityTypeManager->getViewBuilder($paragraph->getEntityTypeId());
       $view = $render_controller->view($paragraph, 'full', $paragraph_item->getLangcode());
