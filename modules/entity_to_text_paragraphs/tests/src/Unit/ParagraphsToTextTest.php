@@ -111,7 +111,7 @@ final class ParagraphsToTextTest extends UnitTestCase {
       }
 
       /**
-       * Mock of EntityReferenceRevisionsItem::getLangcode.
+       * Construct a new anonymous mimic EntityReferenceRevisionsItem.
        */
       public function getLangcode(): string {
         return 'en';
