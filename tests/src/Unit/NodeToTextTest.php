@@ -143,7 +143,7 @@ final class NodeToTextTest extends UnitTestCase {
       ->willReturn($markup_html)
       ->shouldBeCalled();
 
-    $htmlPurifier = $this->prophesize(\HtmlPurifier::class);
+    $htmlPurifier = $this->prophesize(\HTMLPurifier::class);
     $this->htmlPurifier->init()
       ->willReturn($htmlPurifier->reveal())
       ->shouldBeCalled();
