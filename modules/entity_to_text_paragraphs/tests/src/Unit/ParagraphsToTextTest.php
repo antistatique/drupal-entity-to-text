@@ -7,7 +7,6 @@ use Drupal\Core\Entity\EntityViewBuilderInterface;
 use Drupal\Core\Render\Markup;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\entity_reference_revisions\EntityReferenceRevisionsFieldItemList;
-use Drupal\entity_reference_revisions\Plugin\Field\FieldType\EntityReferenceRevisionsItem;
 use Drupal\entity_to_text\HtmlPurifier;
 use Drupal\entity_to_text_paragraphs\Extractor\ParagraphsToText;
 use Drupal\paragraphs\Entity\Paragraph;
@@ -72,21 +71,60 @@ final class ParagraphsToTextTest extends UnitTestCase {
     $paragraph2 = $this->prophesize(Paragraph::class);
     $paragraph2->getEntityTypeId()->willReturn('bar')->shouldBeCalled();
 
-    $fieldRevision1 = $this->prophesize(EntityReferenceRevisionsItem::class);
-    $fieldRevision2 = $this->prophesize(EntityReferenceRevisionsItem::class);
+    $fieldRevision1 = new class($paragraph1->reveal()) {
+      /**
+       * The related paragraph entity.
+       *
+       * @var \Drupal\paragraphs\Entity\Paragraph
+       */
+      public $entity;
 
-    $fieldRevision1->get('entity')->willReturn($paragraph1->reveal())->shouldBeCalled();
-    $fieldRevision1->getLangcode()->willReturn('en')->shouldBeCalled();
+      /**
+       * Construct a new anonymous mimic EntityReferenceRevisionsItem.
+       */
+      public function __construct($entity) {
+        $this->entity = $entity;
+      }
 
-    $fieldRevision2->get('entity')->willReturn($paragraph2->reveal())->shouldBeCalled();
-    $fieldRevision2->getLangcode()->willReturn('en')->shouldBeCalled();
+      /**
+       * Mock of EntityReferenceRevisionsItem::getLangcode.
+       */
+      public function getLangcode(): string {
+        return 'en';
+      }
+
+    };
+
+    $fieldRevision2 = new class($paragraph2->reveal()) {
+      /**
+       * The related paragraph entity.
+       *
+       * @var \Drupal\paragraphs\Entity\Paragraph
+       */
+      public $entity;
+
+      /**
+       * Construct a new anonymous mimic EntityReferenceRevisionsItem.
+       */
+      public function __construct($entity) {
+        $this->entity = $entity;
+      }
+
+      /**
+       * Construct a new anonymous mimic EntityReferenceRevisionsItem.
+       */
+      public function getLangcode(): string {
+        return 'en';
+      }
+
+    };
 
     // Create a test Paragraphs collection object list.
     $entityReferences = $this->prophesize(EntityReferenceRevisionsFieldItemList::class);
     $entityReferences->getIterator()
       ->willReturn(new \ArrayIterator([
-        $fieldRevision1->reveal(),
-        $fieldRevision2->reveal(),
+        $fieldRevision1,
+        $fieldRevision2,
       ]))
       ->shouldBeCalled();
 

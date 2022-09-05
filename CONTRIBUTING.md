@@ -50,7 +50,6 @@ Run testing by stopping at first failure using the following command:
 
     docker-compose exec -u www-data drupal phpunit --group=entity_to_text --no-coverage --stop-on-failure --configuration=/var/www/html/phpunit.xml
 
-
 ## 🚔 Check Drupal coding standards & Drupal best practices
 
 During Docker build, the following Static Analyzers will be installed on the Docker `drupal` via Composer:
