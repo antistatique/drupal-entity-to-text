@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - init module
 - provides a number of utility and helper APIs for developers to transform content into plain text
+- add coverage for Drupal 9.3, 9.4 & 9.5
+- drop support of drupal below 9.3.x
 
 ### Fixed
 - fix unworking Paragraph to Text transformer
