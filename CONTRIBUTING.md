@@ -11,12 +11,6 @@ Github repo
   $ git remote add github git@github.com:antistatique/drupal-entity-to-text.git
   ```
 
-Drupal repo
-
-  ```
-  $ git remote add drupal git@git.drupal.org:project/entity_to_text.git
-  ```
-
 ## 🔧 Prerequisites
 
 First, you will need to have the following tools installed
