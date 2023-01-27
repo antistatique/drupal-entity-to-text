@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - drop support of drupal below 9.3.x
 - add dependabot for Github Action dependency
 - add upgrade-status check
+- add official support of drupal 10.0
 
 ### Fixed
 - fix unworking Paragraph to Text transformer

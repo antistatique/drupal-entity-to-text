@@ -19,11 +19,13 @@ The main module requires `ezyang/htmlpurifier`
 The submodule `entity_to_text_tika` requires the library `vaites/php-apache-tika`.
 The submodule `entity_to_text_paragraphs` requires the library `drupal/paragraphs`.
 
-## Supporting organizations
+### Which version should I use?
 
-This project is sponsored by [Antistatique](https://www.antistatique.net), a Swiss Web Agency.
-Visit us at [www.antistatique.net](https://www.antistatique.net) or
-[Contact us](mailto:info@antistatique.net).
+| Drupal Core | Entity to Text |
+|:-----------:|:--------------:|
+|     8.x     |       -        |
+|     9.x     |     1.0.x      |
+|    10.x     |     1.0.x      |
 
 ## Getting Started
 
@@ -91,3 +93,14 @@ $settings['entity_to_text_tika.connection']['port'] = '9998';
 $file = $file_item->entity;
 $body = \Drupal::service('entity_to_text_tika.extractor.file_to_text')->fromFileToText($file, 'eng+fra');
 ```
+
+## Supporting organizations
+
+This project is sponsored by [Antistatique](https://www.antistatique.net), a Swiss Web Agency.
+Visit us at [www.antistatique.net](https://www.antistatique.net) or
+[Contact us](mailto:info@antistatique.net).
+
+## Credits
+
+Image Styles Builder is currently maintained by [Kevin Wenger](https://github.com/wengerk). Thank you to all our wonderful [contributors](https://github.com/antistatique/drupal-entity-to-text/contributors) too.
+
