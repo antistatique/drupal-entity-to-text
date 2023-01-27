@@ -1,11 +1,11 @@
-ARG BASE_IMAGE_TAG=9.3
+ARG BASE_IMAGE_TAG=9.5
 FROM wengerk/drupal-for-contrib:${BASE_IMAGE_TAG}
 
 ARG BASE_IMAGE_TAG
 ENV BASE_IMAGE_TAG=${BASE_IMAGE_TAG}
 
 # Disable deprecation notice.
-ENV SYMFONY_DEPRECATIONS_HELPER=disabled
+# ENV SYMFONY_DEPRECATIONS_HELPER=disabled
 
 # Install ezyang/htmlpurifier as required by entity_to_text
 RUN COMPOSER_MEMORY_LIMIT=-1 composer require "ezyang/htmlpurifier:^4.14"

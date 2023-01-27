@@ -17,7 +17,7 @@ First, you will need to have the following tools installed
 globally on your environment:
 
   * drush
-  * Latest dev release of Drupal 9.x.
+  * Latest dev release of Drupal 9.x/10.x.
   * docker
   * docker-compose
 
@@ -25,7 +25,7 @@ globally on your environment:
 
 Once run, you will be able to access to your fresh installed Drupal on `localhost::8888`.
 
-    docker-compose build --pull --build-arg BASE_IMAGE_TAG=9.3 drupal
+    docker-compose build --pull --build-arg BASE_IMAGE_TAG=9.5 drupal
     (get a coffee, this will take some time...)
     docker-compose up -d drupal
     docker-compose exec -u www-data drupal drush site-install standard --db-url="mysql://drupal:drupal@db/drupal" --site-name=Example -y
@@ -73,13 +73,13 @@ violations.
 PHP_CodeSniffer is an essential development tool that ensures your code remains clean and consistent.
 
   ```
-  $ docker-compose exec drupal ./vendor/bin/phpcs
+  $ docker-compose exec drupal ./vendor/bin/phpcs web/modules/contrib/entity_to_text
   ```
 
 Automatically fix coding standards
 
   ```
-  $ docker-compose exec drupal ./vendor/bin/phpcbf
+  $ docker-compose exec drupal ./vendor/bin/phpcbf web/modules/contrib/entity_to_text
   ```
 
 #### Running PHP Mess Detector

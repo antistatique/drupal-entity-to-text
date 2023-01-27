@@ -10,6 +10,7 @@ use Drupal\file\Entity\File;
 use Drupal\Tests\UnitTestCase;
 use Psr\Log\LoggerInterface;
 use Vaites\ApacheTika\Clients\WebClient;
+use Prophecy\Prophet;
 
 /**
  * Tests the Tika File Extractor.
@@ -52,25 +53,42 @@ final class FileToTextTest extends UnitTestCase {
   protected $logger;
 
   /**
+   * The prophecy object.
+   *
+   * @var \Prophecy\Prophet
+   */
+  private $prophet;
+
+  /**
    * {@inheritdoc}
    */
   protected function setUp(): void {
     parent::setUp();
 
+    $this->prophet = new Prophet();
     $settings['entity_to_text_tika.connection']['host'] = 'tika';
     $settings['entity_to_text_tika.connection']['port'] = '9998';
     $settings = new Settings($settings);
 
-    $this->client = $this->prophesize(WebClient::class);
-    $this->fileSystem = $this->prophesize(FileSystemInterface::class);
-    $this->loggerFactory = $this->prophesize(LoggerChannelFactoryInterface::class);
-    $this->logger = $this->prophesize(LoggerInterface::class);
+    $this->client = $this->prophet->prophesize(WebClient::class);
+    $this->fileSystem = $this->prophet->prophesize(FileSystemInterface::class);
+    $this->loggerFactory = $this->prophet->prophesize(LoggerChannelFactoryInterface::class);
+    $this->logger = $this->prophet->prophesize(LoggerInterface::class);
 
     $this->loggerFactory->get('entity_to_text')
       ->willReturn($this->logger->reveal());
 
     $this->fileToText = new FileToText($settings, $this->fileSystem->reveal(), $this->loggerFactory->reveal());
     $this->fileToText->setClient($this->client->reveal());
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function tearDown(): void {
+    parent::tearDown();
+
+    $this->prophet->checkPredictions();
   }
 
   /**
@@ -84,7 +102,7 @@ final class FileToTextTest extends UnitTestCase {
     $fileToText = new FileToText($settings, $this->fileSystem->reveal(), $this->loggerFactory->reveal());
 
     // Create a test file object.
-    $file = $this->prophesize(File::class);
+    $file = $this->prophet->prophesize(File::class);
 
     self::assertEmpty($fileToText->fromFileToText($file->reveal()));
   }
@@ -94,7 +112,7 @@ final class FileToTextTest extends UnitTestCase {
    */
   public function testFromFileToText(): void {
     // Create a test file object.
-    $file = $this->prophesize(File::class);
+    $file = $this->prophet->prophesize(File::class);
     $file->getFileUri()
       ->willReturn('public://file/test.txt')
       ->shouldBeCalled();
@@ -117,7 +135,7 @@ final class FileToTextTest extends UnitTestCase {
    */
   public function testFromFileToTextException(): void {
     // Create a test file object.
-    $file = $this->prophesize(File::class);
+    $file = $this->prophet->prophesize(File::class);
     $file->getFileUri()
       ->willReturn('public://file/test.txt')
       ->shouldBeCalled();
