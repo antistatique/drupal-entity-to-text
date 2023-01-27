@@ -73,13 +73,13 @@ violations.
 PHP_CodeSniffer is an essential development tool that ensures your code remains clean and consistent.
 
   ```
-  $ docker-compose exec drupal ./vendor/bin/phpcs
+  $ docker-compose exec drupal ./vendor/bin/phpcs web/modules/contrib/entity_to_text
   ```
 
 Automatically fix coding standards
 
   ```
-  $ docker-compose exec drupal ./vendor/bin/phpcbf
+  $ docker-compose exec drupal ./vendor/bin/phpcbf web/modules/contrib/entity_to_text
   ```
 
 #### Running PHP Mess Detector

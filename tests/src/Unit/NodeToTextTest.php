@@ -11,6 +11,7 @@ use Drupal\entity_to_text\Extractor\NodeToText;
 use Drupal\entity_to_text\HtmlPurifier;
 use Drupal\node\NodeInterface;
 use Drupal\Tests\UnitTestCase;
+use Prophecy\Prophet;
 
 /**
  * Tests the Node to Text Extractor.
@@ -45,16 +46,33 @@ final class NodeToTextTest extends UnitTestCase {
   protected $fieldTypeManager;
 
   /**
+   * The prophecy object.
+   *
+   * @var \Prophecy\Prophet
+   */
+  private $prophet;
+
+  /**
    * {@inheritdoc}
    */
   protected function setUp(): void {
     parent::setUp();
 
-    $this->htmlPurifier = $this->prophesize(HtmlPurifier::class);
-    $this->renderer = $this->prophesize(RendererInterface::class);
-    $this->fieldTypeManager = $this->prophesize(FieldTypePluginManagerInterface::class);
+    $this->prophet = new Prophet();
+    $this->htmlPurifier = $this->prophet->prophesize(HtmlPurifier::class);
+    $this->renderer = $this->prophet->prophesize(RendererInterface::class);
+    $this->fieldTypeManager = $this->prophet->prophesize(FieldTypePluginManagerInterface::class);
 
     $this->nodeToText = new NodetoText($this->htmlPurifier->reveal(), $this->renderer->reveal(), $this->fieldTypeManager->reveal());
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function tearDown(): void {
+    parent::tearDown();
+
+    $this->prophet->checkPredictions();
   }
 
   /**
@@ -62,7 +80,7 @@ final class NodeToTextTest extends UnitTestCase {
    */
   public function testFromFieldtoTextWithoutDefinition(): void {
     // Create a test node object.
-    $node = $this->prophesize(NodeInterface::class);
+    $node = $this->prophet->prophesize(NodeInterface::class);
 
     self::assertEmpty($this->nodeToText->fromFieldtoText('field_foo', $node->reveal()));
   }
@@ -72,13 +90,13 @@ final class NodeToTextTest extends UnitTestCase {
    */
   public function testFromFieldtoTextFieldEmpty(): void {
     $node_field_type_definition = ['default_formatter' => 'default'];
-    $node_field_definition = $this->prophesize(FieldDefinitionInterface::class);
+    $node_field_definition = $this->prophet->prophesize(FieldDefinitionInterface::class);
     $node_field_definition->getType()
       ->willReturn('node')
       ->shouldBeCalled();
 
     // Create a test node object.
-    $node = $this->prophesize(NodeInterface::class);
+    $node = $this->prophet->prophesize(NodeInterface::class);
     $node
       ->getFieldDefinition('field_foo')
       ->willReturn($node_field_definition->reveal())
@@ -89,7 +107,7 @@ final class NodeToTextTest extends UnitTestCase {
       ->willReturn($node_field_type_definition)
       ->shouldBeCalled();
 
-    $field = $this->prophesize(FieldItemList::class);
+    $field = $this->prophet->prophesize(FieldItemList::class);
     $node->get('field_foo')
       ->willReturn($field->reveal())
       ->shouldBeCalled();
@@ -106,13 +124,13 @@ final class NodeToTextTest extends UnitTestCase {
    */
   public function testFromFieldtoText(): void {
     $node_field_type_definition = ['default_formatter' => 'default'];
-    $node_field_definition = $this->prophesize(FieldDefinitionInterface::class);
+    $node_field_definition = $this->prophet->prophesize(FieldDefinitionInterface::class);
     $node_field_definition->getType()
       ->willReturn('node')
       ->shouldBeCalled();
 
     // Create a test node object.
-    $node = $this->prophesize(NodeInterface::class);
+    $node = $this->prophet->prophesize(NodeInterface::class);
     $node
       ->getFieldDefinition('field_foo')
       ->willReturn($node_field_definition->reveal())
@@ -123,7 +141,7 @@ final class NodeToTextTest extends UnitTestCase {
       ->willReturn($node_field_type_definition)
       ->shouldBeCalled();
 
-    $field = $this->prophesize(FieldItemList::class);
+    $field = $this->prophet->prophesize(FieldItemList::class);
     $node->get('field_foo')
       ->willReturn($field->reveal())
       ->shouldBeCalled();
@@ -143,7 +161,7 @@ final class NodeToTextTest extends UnitTestCase {
       ->willReturn($markup_html)
       ->shouldBeCalled();
 
-    $htmlPurifier = $this->prophesize(\HTMLPurifier::class);
+    $htmlPurifier = $this->prophet->prophesize(\HTMLPurifier::class);
     $this->htmlPurifier->init()
       ->willReturn($htmlPurifier->reveal())
       ->shouldBeCalled();
@@ -161,13 +179,13 @@ final class NodeToTextTest extends UnitTestCase {
    */
   public function testFromFieldtoTextMarkupObject(): void {
     $node_field_type_definition = ['default_formatter' => 'default'];
-    $node_field_definition = $this->prophesize(FieldDefinitionInterface::class);
+    $node_field_definition = $this->prophet->prophesize(FieldDefinitionInterface::class);
     $node_field_definition->getType()
       ->willReturn('node')
       ->shouldBeCalled();
 
     // Create a test node object.
-    $node = $this->prophesize(NodeInterface::class);
+    $node = $this->prophet->prophesize(NodeInterface::class);
     $node
       ->getFieldDefinition('field_foo')
       ->willReturn($node_field_definition->reveal())
@@ -178,7 +196,7 @@ final class NodeToTextTest extends UnitTestCase {
       ->willReturn($node_field_type_definition)
       ->shouldBeCalled();
 
-    $field = $this->prophesize(FieldItemList::class);
+    $field = $this->prophet->prophesize(FieldItemList::class);
     $node->get('field_foo')
       ->willReturn($field->reveal())
       ->shouldBeCalled();
@@ -198,7 +216,7 @@ final class NodeToTextTest extends UnitTestCase {
       ->willReturn($markup)
       ->shouldBeCalled();
 
-    $htmlPurifier = $this->prophesize(\HTMLPurifier::class);
+    $htmlPurifier = $this->prophet->prophesize(\HTMLPurifier::class);
     $this->htmlPurifier->init()
       ->willReturn($htmlPurifier->reveal())
       ->shouldBeCalled();

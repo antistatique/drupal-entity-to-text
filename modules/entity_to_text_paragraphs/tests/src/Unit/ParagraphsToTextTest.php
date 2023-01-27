@@ -11,6 +11,7 @@ use Drupal\entity_to_text\HtmlPurifier;
 use Drupal\entity_to_text_paragraphs\Extractor\ParagraphsToText;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\Tests\UnitTestCase;
+use Prophecy\Prophet;
 
 /**
  * Tests the Paragraphs to Text Extractor.
@@ -39,16 +40,33 @@ final class ParagraphsToTextTest extends UnitTestCase {
   protected $renderer;
 
   /**
+   * The prophecy object.
+   *
+   * @var \Prophecy\Prophet
+   */
+  private $prophet;
+
+  /**
    * {@inheritdoc}
    */
   protected function setUp(): void {
     parent::setUp();
 
-    $this->htmlPurifier = $this->prophesize(HtmlPurifier::class);
-    $this->renderer = $this->prophesize(RendererInterface::class);
-    $this->entityTypeManager = $this->prophesize(EntityTypeManagerInterface::class);
+    $this->prophet = new Prophet();
+    $this->htmlPurifier = $this->prophet->prophesize(HtmlPurifier::class);
+    $this->renderer = $this->prophet->prophesize(RendererInterface::class);
+    $this->entityTypeManager = $this->prophet->prophesize(EntityTypeManagerInterface::class);
 
     $this->paragraphsToText = new ParagraphsToText($this->htmlPurifier->reveal(), $this->renderer->reveal(), $this->entityTypeManager->reveal());
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function tearDown(): void {
+    parent::tearDown();
+
+    $this->prophet->checkPredictions();
   }
 
   /**
@@ -56,7 +74,7 @@ final class ParagraphsToTextTest extends UnitTestCase {
    */
   public function testFromParagraphToTextEmpty(): void {
     // Create an empty test Paragraphs collection object list.
-    $entityReferences = $this->prophesize(EntityReferenceRevisionsFieldItemList::class);
+    $entityReferences = $this->prophet->prophesize(EntityReferenceRevisionsFieldItemList::class);
     $entityReferences->getIterator()->willReturn(new \ArrayIterator([]))->shouldBeCalled();
 
     self::assertEquals([], $this->paragraphsToText->fromParagraphToText($entityReferences->reveal()));
@@ -66,9 +84,9 @@ final class ParagraphsToTextTest extends UnitTestCase {
    * @covers ::fromParagraphToText()
    */
   public function testFromParagraphToText(): void {
-    $paragraph1 = $this->prophesize(Paragraph::class);
+    $paragraph1 = $this->prophet->prophesize(Paragraph::class);
     $paragraph1->getEntityTypeId()->willReturn('foo')->shouldBeCalled();
-    $paragraph2 = $this->prophesize(Paragraph::class);
+    $paragraph2 = $this->prophet->prophesize(Paragraph::class);
     $paragraph2->getEntityTypeId()->willReturn('bar')->shouldBeCalled();
 
     $fieldRevision1 = new class($paragraph1->reveal()) {
@@ -120,7 +138,7 @@ final class ParagraphsToTextTest extends UnitTestCase {
     };
 
     // Create a test Paragraphs collection object list.
-    $entityReferences = $this->prophesize(EntityReferenceRevisionsFieldItemList::class);
+    $entityReferences = $this->prophet->prophesize(EntityReferenceRevisionsFieldItemList::class);
     $entityReferences->getIterator()
       ->willReturn(new \ArrayIterator([
         $fieldRevision1,
@@ -128,7 +146,7 @@ final class ParagraphsToTextTest extends UnitTestCase {
       ]))
       ->shouldBeCalled();
 
-    $view_builder_interface = $this->prophesize(EntityViewBuilderInterface::class);
+    $view_builder_interface = $this->prophet->prophesize(EntityViewBuilderInterface::class);
     $this->entityTypeManager->getViewBuilder('foo')
       ->willReturn($view_builder_interface->reveal())
       ->shouldBeCalled();
@@ -160,7 +178,7 @@ final class ParagraphsToTextTest extends UnitTestCase {
       ->willReturn($markup2)
       ->shouldBeCalled();
 
-    $htmlPurifier = $this->prophesize(\HTMLPurifier::class);
+    $htmlPurifier = $this->prophet->prophesize(\HTMLPurifier::class);
 
     $this->htmlPurifier->init()
       ->willReturn($htmlPurifier)
