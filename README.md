@@ -102,5 +102,5 @@ Visit us at [www.antistatique.net](https://www.antistatique.net) or
 
 ## Credits
 
-Image Styles Builder is currently maintained by [Kevin Wenger](https://github.com/wengerk). Thank you to all our wonderful [contributors](https://github.com/antistatique/drupal-entity-to-text/contributors) too.
+Entity to Text is currently maintained by [Kevin Wenger](https://github.com/wengerk). Thank you to all our wonderful [contributors](https://github.com/antistatique/drupal-entity-to-text/contributors) too.
 
