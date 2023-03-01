@@ -111,7 +111,7 @@ class FileToText {
   public function getClient(string $param1 = NULL, $param2 = NULL, array $options = [], bool $check = TRUE): Client {
     if (!$this->client) {
       $this->client = Client::make($param1, $param2, $options, $check);
-      $this->client->setTimeout(20);
+      $this->client->setTimeout(60);
     }
 
     return $this->client;
