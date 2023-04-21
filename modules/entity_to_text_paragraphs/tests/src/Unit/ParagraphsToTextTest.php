@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\entity_to_text_paragraphs\Unit;
 
+use Prophecy\Prophecy\ObjectProphecy;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\EntityViewBuilderInterface;
 use Drupal\Core\Render\Markup;
@@ -40,11 +41,25 @@ final class ParagraphsToTextTest extends UnitTestCase {
   protected $renderer;
 
   /**
+   * A mocked instance of the entity type manager service.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface|\Prophecy\Prophecy\ObjectProphecy
+   */
+  private EntityTypeManagerInterface|ObjectProphecy $entityTypeManager;
+
+  /**
    * The prophecy object.
    *
    * @var \Prophecy\Prophet
    */
   private $prophet;
+
+  /**
+   * The Paragraph to Text extractor.
+   *
+   * @var \Drupal\entity_to_text_paragraphs\Extractor\ParagraphsToText
+   */
+  private ParagraphsToText $paragraphsToText;
 
   /**
    * {@inheritdoc}

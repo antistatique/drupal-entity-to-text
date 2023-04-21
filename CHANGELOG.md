@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - increase timeout to 20sec
 
+### Fixed
+- fix D10 deprecations: Creation of dynamic property is deprecated
+
 ## [1.0.0] - 2023-01-27
 ### Added
 - init module

@@ -53,6 +53,13 @@ final class NodeToTextTest extends UnitTestCase {
   private $prophet;
 
   /**
+   * The Node to Text extractor.
+   *
+   * @var \Drupal\entity_to_text\Extractor\NodeToText
+   */
+  private NodeToText $nodeToText;
+
+  /**
    * {@inheritdoc}
    */
   protected function setUp(): void {

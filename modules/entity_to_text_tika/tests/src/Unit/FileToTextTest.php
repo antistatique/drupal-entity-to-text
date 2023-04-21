@@ -60,6 +60,13 @@ final class FileToTextTest extends UnitTestCase {
   private $prophet;
 
   /**
+   * The File To Text extractor.
+   *
+   * @var \Drupal\entity_to_text_tika\Extractor\FileToText
+   */
+  private FileToText $fileToText;
+
+  /**
    * {@inheritdoc}
    */
   protected function setUp(): void {
