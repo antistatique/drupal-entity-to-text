@@ -7,3 +7,4 @@ services:
       - '@settings'
       - '@file_system'
       - '@logger.factory'
+      - '@event_dispatcher'

@@ -2,11 +2,14 @@
 
 namespace Drupal\entity_to_text_tika\Extractor;
 
+use Drupal\entity_to_text_tika\Event\EntityToTextTikaEvents;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Site\Settings;
+use Drupal\entity_to_text_tika\Event\PreProcessFileEvent;
 use Drupal\file\Entity\File;
 use Vaites\ApacheTika\Client;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Provide Capabilities to transform a File content to plain-text via Tika.
@@ -42,13 +45,21 @@ class FileToText {
   protected $client;
 
   /**
+   * The event dispatcher.
+   *
+   * @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface
+   */
+  private $eventDispatcher;
+
+  /**
    * Construct a new FileToText object.
    */
-  public function __construct(Settings $settings, FileSystemInterface $file_system, LoggerChannelFactoryInterface $logger_factory) {
+  public function __construct(Settings $settings, FileSystemInterface $file_system, LoggerChannelFactoryInterface $logger_factory, EventDispatcherInterface $event_dispatcher) {
     $this->settings = $settings;
     $this->fileSystem = $file_system;
     $this->logger = $logger_factory->get('entity_to_text');
     $this->client = NULL;
+    $this->eventDispatcher = $event_dispatcher;
   }
 
   /**
@@ -74,6 +85,14 @@ class FileToText {
     /** @var \Vaites\ApacheTika\Clients\WebClient $web_client */
     $web_client = $this->getClient($settings_tika_connection['host'], $settings_tika_connection['port']);
     $web_client->setOCRLanguage($langcode);
+
+    $event = new PreProcessFileEvent($web_client, $file);
+    /** @var \Drupal\entity_to_text_tika\Event\PreProcessFileEvent $event */
+    $event = $this->eventDispatcher->dispatch($event, EntityToTextTikaEvents::PRE_PROCESS_FILE);
+
+    // Use the Event altered Client and File.
+    $web_client = $event->getClient();
+    $file = $event->getFile();
 
     $absolute_path = $this->fileSystem->realpath($file->getFileUri());
 
