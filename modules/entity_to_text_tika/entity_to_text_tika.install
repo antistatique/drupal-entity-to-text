@@ -1,0 +1,45 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall fn for the Entity to Text Tika sub-module.
+ */
+
+/**
+ * Implements hook_requirements().
+ */
+function entity_to_text_tika_requirements($phase = 'runtime') {
+  $requirements = [];
+  $stream_wrapper_manager = \Drupal::service('stream_wrapper_manager');
+  $file_system = \Drupal::service('file_system');
+
+  /* ************************************************************************ */
+  // Check private file directory.
+  /* ************************************************************************ */
+
+  if ($phase !== 'runtime') {
+    return $requirements;
+  }
+
+  $requirements['entity_to_text_tika_private'] = [
+    'title' => t('Entity to Text (Tika): Private schema'),
+    'value' => t('Private file system is set and writtable.'),
+  ];
+
+  // Check if the private file stream wrapper is ready to use.
+  if (!$stream_wrapper_manager->isValidScheme('private')) {
+    $requirements['entity_to_text_tika_private']['value'] = 'Private file system is not set.';
+    $requirements['entity_to_text_tika_private']['description'] = t('Entity to Text Tika will store OCR of document in the private:// schema, there this one must be configured before installing.');
+    $requirements['entity_to_text_tika_private']['severity'] = REQUIREMENT_ERROR;
+  }
+
+  $private_path = $file_system->realpath('private://');
+  // Check if the private file stream wrapper is ready to use.
+  if (!is_dir($private_path) || !is_writable($private_path)) {
+    $requirements['entity_to_text_tika_private']['value'] = 'Private file system is not writtable.';
+    $requirements['entity_to_text_tika_private']['description'] = t('The resolved private directory %directory% seems not writable.', ['%directory%' => $private_path]);
+    $requirements['entity_to_text_tika_private']['severity'] = REQUIREMENT_ERROR;
+  }
+
+  return $requirements;
+}

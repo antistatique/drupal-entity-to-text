@@ -9,10 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - increase timeout to 20sec
 
 ### Fixed
-- fix D10 deprecations: Creation of dynamic property is deprecated
-
-### Added
 - add event PRE_PROCESS_FILE to allow client or file alteration before Tika OCR
+
+### Added
+- add a new layer of performance by allowing developers to cache OCR'ed files
 
 ## [1.0.0] - 2023-01-27
 ### Added
