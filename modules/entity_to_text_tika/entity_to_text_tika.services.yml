@@ -8,3 +8,11 @@ services:
       - '@file_system'
       - '@logger.factory'
       - '@event_dispatcher'
+
+  # Storage
+  entity_to_text_tika.storage.plain_text:
+    class: Drupal\entity_to_text_tika\Storage\PlaintextStorage
+    arguments:
+      - '@file_system'
+      - '@logger.factory'
+      - '@stream_wrapper_manager'
