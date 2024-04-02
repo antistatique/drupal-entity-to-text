@@ -8,7 +8,6 @@ ENV BASE_IMAGE_TAG=${BASE_IMAGE_TAG}
 # @see https://www.drupal.org/project/drupal/issues/3403491
 ENV SYMFONY_DEPRECATIONS_HELPER=weak
 
-
 # Install ezyang/htmlpurifier as required by entity_to_text
 RUN COMPOSER_MEMORY_LIMIT=-1 composer require "ezyang/htmlpurifier:^4.14"
 

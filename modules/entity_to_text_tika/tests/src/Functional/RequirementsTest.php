@@ -9,6 +9,7 @@ use Drupal\Tests\BrowserTestBase;
  *
  * @group entity_to_text
  * @group entity_to_text_tika
+ * @group entity_to_text_functional
  * @group entity_to_text_tika_functional
  */
 class RequirementsTest extends BrowserTestBase {
