@@ -2,19 +2,19 @@
 
 namespace Drupal\Tests\entity_to_text_tika\Unit;
 
-use Drupal\entity_to_text_tika\Event\EntityToTextTikaEvents;
-use Prophecy\Prophecy\ObjectProphecy;
-use Drupal\entity_to_text_tika\Event\PreProcessFileEvent;
-use Drupal\entity_to_text_tika\Extractor\FileToText;
-use Drupal\Tests\UnitTestCase;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Site\Settings;
+use Drupal\entity_to_text_tika\Event\EntityToTextTikaEvents;
+use Drupal\entity_to_text_tika\Event\PreProcessFileEvent;
+use Drupal\entity_to_text_tika\Extractor\FileToText;
 use Drupal\file\Entity\File;
-use Psr\Log\LoggerInterface;
-use Vaites\ApacheTika\Clients\WebClient;
+use Drupal\Tests\UnitTestCase;
+use Prophecy\Prophecy\ObjectProphecy;
 use Prophecy\Prophet;
+use Psr\Log\LoggerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Vaites\ApacheTika\Clients\WebClient;
 
 /**
  * @coversDefaultClass \Drupal\entity_to_text_tika\Event\PreProcessFileEvent

@@ -2,7 +2,6 @@
 
 namespace Drupal\Tests\entity_to_text_paragraphs\Unit;
 
-use Prophecy\Prophecy\ObjectProphecy;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\EntityViewBuilderInterface;
 use Drupal\Core\Render\Markup;
@@ -12,6 +11,7 @@ use Drupal\entity_to_text\HtmlPurifier;
 use Drupal\entity_to_text_paragraphs\Extractor\ParagraphsToText;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\Tests\UnitTestCase;
+use Prophecy\Prophecy\ObjectProphecy;
 use Prophecy\Prophet;
 
 /**
