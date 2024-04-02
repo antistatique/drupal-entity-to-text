@@ -1,0 +1,9 @@
+services:
+  entity_to_text_tika.ocr_warmup_command:
+    class: \Drupal\entity_to_text_tika\Commands\OcrWarmupCommand
+    arguments:
+      - '@entity_type.manager'
+      - '@entity_to_text_tika.extractor.file_to_text'
+      - '@entity_to_text_tika.storage.plain_text'
+    tags:
+      - { name: drush.command }

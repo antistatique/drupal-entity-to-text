@@ -99,6 +99,23 @@ if (!$body) {
 }
 ```
 
+### Generate OCR via CLI
+
+The module expose a Drush command to generate OCR for all Drupal files.
+
+This command is intended to be used sporadically, as it can be resource intensive.
+The purpose is to generate OCR for all files that have not been OCR'ed yet.
+This may be usefully after an initial install, a new OCR language has been added or right after files migration.
+
+```bash
+# Warmup all files that does not already have an associated .ocr file.
+drush e2t:t:w
+# Warmup all files even if the files has already been processed before.
+drush e2t:t:w --force
+# Warmup the file with FID 2.
+drush e2t:t:w --fid=2
+```
+
 ## Supporting organizations
 
 This project is sponsored by [Antistatique](https://www.antistatique.net), a Swiss Web Agency.
