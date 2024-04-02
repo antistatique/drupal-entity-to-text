@@ -2,9 +2,9 @@
 
 namespace Drupal\entity_to_text_tika\Event;
 
-use Vaites\ApacheTika\Client;
-use Drupal\file\Entity\File;
 use Drupal\Component\EventDispatcher\Event;
+use Drupal\file\Entity\File;
+use Vaites\ApacheTika\Client;
 
 /**
  * Event fired just before processing a file through Tika.

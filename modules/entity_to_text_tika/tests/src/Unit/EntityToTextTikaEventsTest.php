@@ -2,8 +2,8 @@
 
 namespace Drupal\Tests\entity_to_text_tika\Unit;
 
-use Drupal\Tests\UnitTestCase;
 use Drupal\entity_to_text_tika\Event\EntityToTextTikaEvents;
+use Drupal\Tests\UnitTestCase;
 
 /**
  * @coversDefaultClass \Drupal\entity_to_text_tika\Event\EntityToTextTikaEvents

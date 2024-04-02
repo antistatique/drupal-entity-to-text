@@ -2,14 +2,14 @@
 
 namespace Drupal\entity_to_text_tika\Extractor;
 
-use Drupal\entity_to_text_tika\Event\EntityToTextTikaEvents;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Site\Settings;
+use Drupal\entity_to_text_tika\Event\EntityToTextTikaEvents;
 use Drupal\entity_to_text_tika\Event\PreProcessFileEvent;
 use Drupal\file\Entity\File;
-use Vaites\ApacheTika\Client;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Vaites\ApacheTika\Client;
 
 /**
  * Provide Capabilities to transform a File content to plain-text via Tika.
