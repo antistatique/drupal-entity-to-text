@@ -5,13 +5,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Removed
+- drop support of drupal below 9.5.x
+
 ### Changed
 - increase timeout to 20sec
 
 ### Fixed
 - fix D10 deprecations: Creation of dynamic property is deprecated
 
-### Added
+### Added
 - add event PRE_PROCESS_FILE to allow client or file alteration before Tika OCR
 
 ## [1.0.0] - 2023-01-27

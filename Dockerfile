@@ -1,11 +1,13 @@
-ARG BASE_IMAGE_TAG=9.5
+ARG BASE_IMAGE_TAG=10.2
 FROM wengerk/drupal-for-contrib:${BASE_IMAGE_TAG}
 
 ARG BASE_IMAGE_TAG
 ENV BASE_IMAGE_TAG=${BASE_IMAGE_TAG}
 
-# Disable deprecation notice.
-# ENV SYMFONY_DEPRECATIONS_HELPER=disabled
+# Disable deprecation notice since PHPUnit 10 with Drupal 10.2 and upper.
+# @see https://www.drupal.org/project/drupal/issues/3403491
+ENV SYMFONY_DEPRECATIONS_HELPER=weak
+
 
 # Install ezyang/htmlpurifier as required by entity_to_text
 RUN COMPOSER_MEMORY_LIMIT=-1 composer require "ezyang/htmlpurifier:^4.14"
