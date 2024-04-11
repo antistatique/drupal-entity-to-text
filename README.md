@@ -31,15 +31,6 @@ The submodule `entity_to_text_paragraphs` requires the library `drupal/paragraph
 
 We highly recommend you to install the module using `composer`.
 
-```yaml
-"repositories": [
-  {
-    "type": "vcs",
-    "url": "https://github.com/antistatique/drupal-entity-to-text"
-  }
-],
-```
-
 ```bash
 $ composer require drupal/entity_to_text
 ```

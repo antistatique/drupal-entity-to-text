@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - add event PRE_PROCESS_FILE to allow client or file alteration before Tika OCR
+- add Drupal GitlabCI
+- add cpsell project words for Gitlab-CI
 
 ## [1.0.0] - 2023-01-27
 ### Added

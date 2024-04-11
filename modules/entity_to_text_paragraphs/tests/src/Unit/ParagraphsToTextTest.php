@@ -22,6 +22,8 @@ use Prophecy\Prophet;
  * @group entity_to_text
  * @group entity_to_text_paragraphs
  *
+ * @requires module paragraphs
+ *
  * @internal
  */
 final class ParagraphsToTextTest extends UnitTestCase {

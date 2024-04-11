@@ -116,7 +116,7 @@ class PreProcessFileEventTest extends UnitTestCase {
     $this->eventDispatcher->dispatch($event, EntityToTextTikaEvents::PRE_PROCESS_FILE)
       ->willReturn($event)
       ->shouldBeCalled();
-    $this->fileToText->fromFileToText($this->testFile->reveal());
+    self::assertEquals('Commodo duis lorem vestibulum imperdiet vel hac', $this->fileToText->fromFileToText($this->testFile->reveal()));
   }
 
 }

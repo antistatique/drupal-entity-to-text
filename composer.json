@@ -17,6 +17,12 @@
       "role": "Author & Maintainer"
     }
   ],
+  "repositories": [
+      {
+          "type": "composer",
+          "url": "https://packages.drupal.org/8"
+      }
+  ],
   "support": {
     "issues": "https://www.drupal.org/project/issues/entity_to_text"
   },
@@ -25,7 +31,9 @@
     "ezyang/htmlpurifier": "^4.14"
   },
   "require-dev": {
-    "drupal/coder": "^8.3.1"
+    "drupal/coder": "^8.3.1",
+    "drupal/paragraphs": "^1.0",
+    "vaites/php-apache-tika": "^1"
   },
   "config": {
     "allow-plugins": {

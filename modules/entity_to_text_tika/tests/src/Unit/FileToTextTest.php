@@ -188,7 +188,7 @@ final class FileToTextTest extends UnitTestCase {
       '@message' => 'foo bar',
     ])->shouldBeCalled();
 
-    $this->fileToText->fromFileToText($file->reveal(), 'fra');
+    self::assertEquals('', $result = $this->fileToText->fromFileToText($file->reveal(), 'fra'));
   }
 
 }

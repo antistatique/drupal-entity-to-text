@@ -1,5 +1,4 @@
 services:
-
   # Event subscriber to reroute companies sectors terms to the companies collection
   entity_to_text.htmlpurifier:
     class: Drupal\entity_to_text\HtmlPurifier
@@ -13,4 +12,3 @@ services:
       - '@entity_to_text.htmlpurifier'
       - '@renderer'
       - '@plugin.manager.field.field_type'
-
