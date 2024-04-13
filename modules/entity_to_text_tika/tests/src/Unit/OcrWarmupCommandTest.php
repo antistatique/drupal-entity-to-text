@@ -7,7 +7,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\Query\QueryInterface;
 use Drupal\entity_to_text_tika\Commands\OcrWarmupCommand;
 use Drupal\entity_to_text_tika\Extractor\FileToText;
-use Drupal\entity_to_text_tika\Storage\PlaintextStorage;
+use Drupal\entity_to_text_tika\Storage\StorageInterface;
 use Drupal\file\Entity\File;
 use Drupal\Tests\UnitTestCase;
 use Symfony\Component\Console\Formatter\OutputFormatterInterface;
@@ -41,9 +41,9 @@ final class OcrWarmupCommandTest extends UnitTestCase {
   /**
    * A mocked Plain-text storage processor.
    *
-   * @var \Drupal\entity_to_text_tika\Storage\PlaintextStorage
+   * @var \Drupal\entity_to_text_tika\Storage\LocalFileStorage
    */
-  protected $plaintextStorage;
+  protected $localFileStorage;
 
   /**
    * The command to test.
@@ -65,13 +65,13 @@ final class OcrWarmupCommandTest extends UnitTestCase {
       ->with('file')
       ->willReturn($this->fileStorage);
 
-    $this->plaintextStorage = $this->createMock(PlaintextStorage::class);
+    $this->localFileStorage = $this->createMock(StorageInterface::class);
     $this->fileToText = $this->createMock(FileToText::class);
 
     $this->warmupCommand = new OcrWarmupCommand(
       $entity_type_manager,
       $this->fileToText,
-      $this->plaintextStorage,
+      $this->localFileStorage,
     );
 
     $input = $this->createMock(InputInterface::class);
@@ -144,8 +144,8 @@ final class OcrWarmupCommandTest extends UnitTestCase {
       )
       ->willReturnOnConsecutiveCalls($file200, $file2039);
 
-    $this->plaintextStorage->expects($this->exactly(2))
-      ->method('loadTextFromFile')
+    $this->localFileStorage->expects($this->exactly(2))
+      ->method('load')
       ->withConsecutive(
         [$file200, 'eng+fra'],
         [$file2039, 'eng+fra'],
@@ -157,8 +157,8 @@ final class OcrWarmupCommandTest extends UnitTestCase {
       ->with($file2039, 'eng+fra')
       ->willReturn('doloreum');
 
-    $this->plaintextStorage->expects($this->once())
-      ->method('saveTextToFile')
+    $this->localFileStorage->expects($this->once())
+      ->method('save')
       ->with($file2039, 'doloreum', 'eng+fra');
 
     $this->warmupCommand->warmup();
@@ -220,14 +220,14 @@ final class OcrWarmupCommandTest extends UnitTestCase {
       )
       ->willReturnOnConsecutiveCalls($file200, $file2039);
 
-    $this->plaintextStorage->expects($this->never())
-      ->method('loadTextFromFile');
+    $this->localFileStorage->expects($this->never())
+      ->method('load');
 
     $this->fileToText->expects($this->never())
       ->method('fromFileToText');
 
-    $this->plaintextStorage->expects($this->never())
-      ->method('saveTextToFile');
+    $this->localFileStorage->expects($this->never())
+      ->method('save');
 
     $this->warmupCommand->warmup([
       'fid' => NULL,
@@ -297,8 +297,8 @@ final class OcrWarmupCommandTest extends UnitTestCase {
       )
       ->willReturnOnConsecutiveCalls($file200, $file2039);
 
-    $this->plaintextStorage->expects($this->exactly(2))
-      ->method('loadTextFromFile')
+    $this->localFileStorage->expects($this->exactly(2))
+      ->method('load')
       ->withConsecutive(
         [$file200, 'eng+fra'],
         [$file2039, 'eng+fra'],
@@ -313,8 +313,8 @@ final class OcrWarmupCommandTest extends UnitTestCase {
       )
       ->willReturn('doloreum', 'ipsum');
 
-    $this->plaintextStorage->expects($this->exactly(2))
-      ->method('saveTextToFile')
+    $this->localFileStorage->expects($this->exactly(2))
+      ->method('save')
       ->withConsecutive(
         [$file2039, 'doloreum', 'eng+fra'],
         [$file2039, 'ipsum', 'eng+fra'],
@@ -376,8 +376,8 @@ final class OcrWarmupCommandTest extends UnitTestCase {
       ->with(200)
       ->willReturn($file200);
 
-    $this->plaintextStorage->expects($this->once())
-      ->method('loadTextFromFile')
+    $this->localFileStorage->expects($this->once())
+      ->method('load')
       ->with($file200, 'eng+fra')
       ->willReturn(NULL);
 
@@ -386,8 +386,8 @@ final class OcrWarmupCommandTest extends UnitTestCase {
       ->with($file200, 'eng+fra')
       ->willReturn('Carpe diem');
 
-    $this->plaintextStorage->expects($this->once())
-      ->method('saveTextToFile')
+    $this->localFileStorage->expects($this->once())
+      ->method('save')
       ->with($file200, 'Carpe diem', 'eng+fra');
 
     $this->warmupCommand->warmup([

@@ -9,8 +9,8 @@ services:
       - '@event_dispatcher'
 
   # Storage
-  entity_to_text_tika.storage.plain_text:
-    class: Drupal\entity_to_text_tika\Storage\PlaintextStorage
+  entity_to_text_tika.storage.local_file:
+    class: Drupal\entity_to_text_tika\Storage\LocalFileStorage
     arguments:
       - '@file_system'
       - '@logger.factory'

@@ -4,7 +4,7 @@ namespace Drupal\entity_to_text_tika\Commands;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\entity_to_text_tika\Extractor\FileToText;
-use Drupal\entity_to_text_tika\Storage\PlaintextStorage;
+use Drupal\entity_to_text_tika\Storage\StorageInterface;
 use Drush\Commands\DrushCommands;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -36,19 +36,19 @@ class OcrWarmupCommand extends DrushCommands {
   protected $fileToText;
 
   /**
-   * The Plain-text storage processor.
+   * The Plain-text storage cache processor.
    *
-   * @var \Drupal\entity_to_text_tika\Storage\PlaintextStorage
+   * @var \Drupal\entity_to_text_tika\Storage\StorageInterface
    */
-  protected $plaintextStorage;
+  protected $localFileStorage;
 
   /**
    * Warmup OCR caches for Tika constructor.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, FileToText $file_to_text, PlaintextStorage $plaintext_storage) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, FileToText $file_to_text, StorageInterface $local_storage) {
     $this->fileStorage = $entity_type_manager->getStorage('file');
     $this->fileToText = $file_to_text;
-    $this->plaintextStorage = $plaintext_storage;
+    $this->localFileStorage = $local_storage;
   }
 
   /**
@@ -149,13 +149,13 @@ class OcrWarmupCommand extends DrushCommands {
           }
 
           // Load the already OCR'ed file if possible.
-          $body = $this->plaintextStorage->loadTextFromFile($file, 'eng+fra');
+          $body = $this->localFileStorage->load($file, 'eng+fra');
 
           if (!$body || $force) {
             // When the OCR'ed file is not available, then run Tika over it
             // and store it for the next run.
             $body = $this->fileToText->fromFileToText($file, 'eng+fra');
-            $this->plaintextStorage->saveTextToFile($file, $body, 'eng+fra');
+            $this->localFileStorage->save($file, $body, 'eng+fra');
           }
 
           $progressbar_objects->advance();

@@ -22,22 +22,22 @@ function entity_to_text_tika_requirements($phase = 'runtime') {
   }
 
   $requirements['entity_to_text_tika_private'] = [
-    'title' => t('Entity to Text (Tika): Private schema'),
+    'title' => t('Entity to Text (Tika): Local File Storage (OCR cache)'),
+    'description' => t('Entity to Text Tika expose a Local File Storage optimisation in order to store OCR of document in the private:// schema. The current private schema configuration can leverage it.'),
     'value' => t('Private file system is set and writtable.'),
   ];
 
   // Check if the private file stream wrapper is ready to use.
   if (!$stream_wrapper_manager->isValidScheme('private')) {
     $requirements['entity_to_text_tika_private']['value'] = 'Private file system is not set.';
-    $requirements['entity_to_text_tika_private']['description'] = t('Entity to Text Tika will store OCR of document in the private:// schema, there this one must be configured before installing.');
-    $requirements['entity_to_text_tika_private']['severity'] = REQUIREMENT_ERROR;
+    $requirements['entity_to_text_tika_private']['description'] = t('Entity to Text Tika expose a Local File Storage optimisation in order to store OCR of document in the private:// schema. The current private schema configuration cannot leverage it.');
+    $requirements['entity_to_text_tika_private']['severity'] = REQUIREMENT_INFO;
   }
 
   $private_path = $file_system->realpath('private://');
   // Check if the private file stream wrapper is ready to use.
   if (!is_dir($private_path) || !is_writable($private_path)) {
-    $requirements['entity_to_text_tika_private']['value'] = 'Private file system is not writtable.';
-    $requirements['entity_to_text_tika_private']['description'] = t('The resolved private directory %directory% seems not writable.', ['%directory%' => $private_path]);
+    $requirements['entity_to_text_tika_private']['value'] = t('Entity to Text Tika expose a Local File Storage optimisation in order to store OCR of document in the private:// schema. The current private schema configuration cannot leverage it. The resolved private directory %directory% seems not writable.', ['%directory%' => $private_path]);
     $requirements['entity_to_text_tika_private']['severity'] = REQUIREMENT_ERROR;
   }
 

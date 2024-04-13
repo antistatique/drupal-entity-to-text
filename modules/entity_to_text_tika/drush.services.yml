@@ -4,6 +4,6 @@ services:
     arguments:
       - '@entity_type.manager'
       - '@entity_to_text_tika.extractor.file_to_text'
-      - '@entity_to_text_tika.storage.plain_text'
+      - '@entity_to_text_tika.storage.local_file'
     tags:
       - { name: drush.command }

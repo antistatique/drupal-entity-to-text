@@ -9,9 +9,9 @@ use Drupal\Core\StreamWrapper\StreamWrapperManagerInterface;
 use Drupal\file\Entity\File;
 
 /**
- * Provide Capabilities to store a Text content to plain-text file.
+ * Provide Capabilities to store a Text content into local plain-text file.
  */
-class PlaintextStorage {
+class LocalFileStorage implements StorageInterface {
 
   public const DESTINATION = 'private://entity-to-text/ocr';
 
@@ -37,7 +37,7 @@ class PlaintextStorage {
   protected $streamWrapperManager;
 
   /**
-   * Construct a new PlaintextStorage object.
+   * Construct a new LocalFileStorage object.
    */
   public function __construct(FileSystemInterface $file_system, LoggerChannelFactoryInterface $logger_factory, StreamWrapperManagerInterface $stream_wrapper_manager) {
     $this->fileSystem = $file_system;
@@ -46,17 +46,9 @@ class PlaintextStorage {
   }
 
   /**
-   * Store a plain text value into a file.
-   *
-   * @param \Drupal\file\Entity\File $file
-   *   The document.
-   * @param string $langcode
-   *   The OCR langcode to be used.
-   *
-   * @return string|null
-   *   The transformed file into a plain text value by Apache Tika.
+   * {@inheritdoc}
    */
-  public function loadTextFromFile(File $file, string $langcode = 'eng'): ?string {
+  public function load(File $file, string $langcode = 'eng'): ?string {
     $fullpath = $this->getFullPath($file, $langcode);
 
     if (!is_file($fullpath)) {
@@ -67,19 +59,11 @@ class PlaintextStorage {
   }
 
   /**
-   * Store a plain text value into a file.
-   *
-   * @param \Drupal\file\Entity\File $file
-   *   The document to be saved.
-   * @param string $content
-   *   The plain-text document to be stored.
-   * @param string $langcode
-   *   The langcode.
-   *
-   * @return string
-   *   The saved fullpath file.
+   * {@inheritdoc}
    */
-  public function saveTextToFile(File $file, string $content, string $langcode = 'eng'): string {
+  public function save(File $file, string $content, string $langcode = 'eng'): string {
+    $this->prepareDestination();
+
     $fullpath = $this->getFullPath($file, $langcode);
     file_put_contents($fullpath, $content);
     return $fullpath;
@@ -97,8 +81,6 @@ class PlaintextStorage {
    *   The given file unique fullpath.
    */
   private function getFullPath(File $file, string $langcode = 'eng'): string {
-    $this->prepareDestination();
-
     $uri = self::DESTINATION;
     $filename = $file->id() . '-' . $file->getFilename() . '.' . $langcode . '.ocr.txt';
 

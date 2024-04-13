@@ -3,21 +3,21 @@
 namespace Drupal\Tests\entity_to_text_tika\Kernel;
 
 use Drupal\Core\File\FileSystemInterface;
-use Drupal\entity_to_text_tika\Storage\PlaintextStorage;
+use Drupal\entity_to_text_tika\Storage\LocalFileStorage;
 use Drupal\file\Entity\File;
 use Drupal\KernelTests\Core\File\FileTestBase;
 
 /**
  * Tests the Plaintext File Storage.
  *
- * @coversDefaultClass \Drupal\entity_to_text_tika\Storage\PlaintextStorage
+ * @coversDefaultClass \Drupal\entity_to_text_tika\Storage\LocalFileStorage
  *
  * @group entity_to_text
  * @group entity_to_text_tika
  *
  * @internal
  */
-final class PlaintextStorageTest extends FileTestBase {
+final class LocalFileStorageTest extends FileTestBase {
 
   /**
    * {@inheritdoc}
@@ -34,9 +34,9 @@ final class PlaintextStorageTest extends FileTestBase {
   /**
    * The plain-text storage processor.
    *
-   * @var \Drupal\entity_to_text_tika\Storage\PlaintextStorage
+   * @var \Drupal\entity_to_text_tika\Storage\LocalFileStorage
    */
-  protected PlaintextStorage $plaintextStorage;
+  protected LocalFileStorage $localFileStorage;
 
   /**
    * {@inheritdoc}
@@ -49,16 +49,16 @@ final class PlaintextStorageTest extends FileTestBase {
     $this->installSchema('file', ['file_usage']);
 
     $this->fileSystem = $this->container->get('file_system');
-    $this->plaintextStorage = $this->container->get('entity_to_text_tika.storage.plain_text');
+    $this->localFileStorage = $this->container->get('entity_to_text_tika.storage.local_file');
 
-    $destination = PlaintextStorage::DESTINATION;
+    $destination = LocalFileStorage::DESTINATION;
     $this->fileSystem->prepareDirectory($destination, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS);
   }
 
   /**
-   * @covers ::loadTextFromFile
+   * @covers ::load
    */
-  public function testLoadTextFromFile(): void {
+  public function testloadPublic(): void {
     // Create an OCR file for testing.
     $file_uri = $this->createUri('390-foo.txt.en.ocr.txt', 'Ipsum excepteur id cupidatat commodo', 'private');
     $this->fileSystem->move($file_uri, 'private://entity-to-text/ocr/390-foo.txt.en.ocr.txt', FileSystemInterface::EXISTS_REPLACE);
@@ -70,13 +70,49 @@ final class PlaintextStorageTest extends FileTestBase {
     ]);
     $file->set('fid', 390);
 
-    self::assertEquals('Ipsum excepteur id cupidatat commodo', $this->plaintextStorage->loadTextFromFile($file, 'en'));
+    self::assertEquals('Ipsum excepteur id cupidatat commodo', $this->localFileStorage->load($file, 'en'));
   }
 
   /**
-   * @covers ::loadTextFromFile
+   * @covers ::load
    */
-  public function testLoadTextFromFileWhenOcrFileNotExists(): void {
+  public function testloadPrivate(): void {
+    // Create an OCR file for testing.
+    $file_uri = $this->createUri('390-foo.txt.en.ocr.txt', 'Ipsum excepteur id cupidatat commodo', 'private');
+    $this->fileSystem->move($file_uri, 'private://entity-to-text/ocr/390-foo.txt.en.ocr.txt', FileSystemInterface::EXISTS_REPLACE);
+
+    // Create a file that correspond to the previous OCR file.
+    $file = File::create([
+      'uri' => 'private://foo.txt',
+      'name' => 'foo',
+    ]);
+    $file->set('fid', 390);
+
+    self::assertEquals('Ipsum excepteur id cupidatat commodo', $this->localFileStorage->load($file, 'en'));
+  }
+
+  /**
+   * @covers ::load
+   */
+  public function testloadSubDirectory(): void {
+    // Create an OCR file for testing.
+    $file_uri = $this->createUri('420-foo.txt.en.ocr.txt', 'Ipsum excepteur id cupidatat commodo', 'private');
+    $this->fileSystem->move($file_uri, 'private://entity-to-text/ocr/420-foo.txt.en.ocr.txt', FileSystemInterface::EXISTS_REPLACE);
+
+    // Create a file that correspond to the previous OCR file.
+    $file = File::create([
+      'uri' => 'public://documents/2024/foo.txt',
+      'name' => 'foo',
+    ]);
+    $file->set('fid', 420);
+
+    self::assertEquals('Ipsum excepteur id cupidatat commodo', $this->localFileStorage->load($file, 'en'));
+  }
+
+  /**
+   * @covers ::load
+   */
+  public function testloadWhenOcrFileNotExists(): void {
     // Create a file that has not been already processed and
     // therefore does not havean OCR associated file.
     $file = File::create([
@@ -86,13 +122,13 @@ final class PlaintextStorageTest extends FileTestBase {
     $file->set('fid', 380);
 
     // When the OCR file does not exists, then nothing can be retreived.
-    self::assertNull($this->plaintextStorage->loadTextFromFile($file, 'en'));
+    self::assertNull($this->localFileStorage->load($file, 'en'));
   }
 
   /**
-   * @covers ::saveTextToFile
+   * @covers ::save
    */
-  public function testSaveTextToFile(): void {
+  public function testSave(): void {
     // Create a file for testing.
     $file = File::create([
       'uri' => $this->createUri('foo.txt', 'veniam consequat duis'),
@@ -100,16 +136,16 @@ final class PlaintextStorageTest extends FileTestBase {
     ]);
     $file->set('fid', 399);
 
-    $file_path = $this->plaintextStorage->saveTextToFile($file, 'veniam consequat duis', 'en');
+    $file_path = $this->localFileStorage->save($file, 'veniam consequat duis', 'en');
     self::assertStringEndsWith('private/entity-to-text/ocr/399-foo.txt.en.ocr.txt', $file_path);
     self::assertFileExists($file_path);
     self::assertEquals('veniam consequat duis', file_get_contents($file_path));
   }
 
   /**
-   * @covers ::saveTextToFile
+   * @covers ::save
    */
-  public function testSaveTextToFileWhenOcrFileAlreadyExists(): void {
+  public function testSaveWhenOcrFileAlreadyExists(): void {
     // Create an OCR file for testing.
     $file_ocr_uri = $this->createUri('400-foo.txt.en.ocr.txt', 'Ipsum excepteur id cupidatat commodo', 'private');
     $this->fileSystem->move($file_ocr_uri, 'private://entity-to-text/ocr/400-foo.txt.en.ocr.txt', FileSystemInterface::EXISTS_REPLACE);
@@ -122,7 +158,7 @@ final class PlaintextStorageTest extends FileTestBase {
     $file->set('fid', 400);
 
     // When the file already exists, it will be overriden.
-    $file_path = $this->plaintextStorage->saveTextToFile($file, 'veniam consequat duis', 'en');
+    $file_path = $this->localFileStorage->save($file, 'veniam consequat duis', 'en');
     self::assertStringEndsWith('private/entity-to-text/ocr/400-foo.txt.en.ocr.txt', $file_path);
     self::assertFileExists($file_path);
     self::assertEquals('veniam consequat duis', file_get_contents($file_path));

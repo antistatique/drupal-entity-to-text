@@ -89,13 +89,13 @@ or for an advanced usage avoiding multiple calls to Tika:
 
 ```php
 // Load the already OCR'ed file if possible to avoid unecessary calls to Tika.
-$body = \Drupal::service('entity_to_text_tika.storage.plain_text')->loadTextFromFile($file, 'eng+fra');
+$body = \Drupal::service('entity_to_text_tika.storage.local_file')->load($file, 'eng+fra');
 
 if (!$body) {
   // When the OCR'ed file is not available, then run Tika over it and store it for the next run.
   $body = \Drupal::service('entity_to_text_tika.extractor.file_to_text')->fromFileToText($file, 'eng+fra');
   // Save the OCR'ed file for the next run.
-  \Drupal::service('entity_to_text_tika.storage.plain_text')->saveTextToFile($file, $body, 'eng+fra');
+  \Drupal::service('entity_to_text_tika.storage.local_file')->save($file, $body, 'eng+fra');
 }
 ```
 

@@ -51,7 +51,7 @@ class RequirementsTest extends BrowserTestBase {
     $this->drupalGet('admin/reports/status');
     $this->assertSession()->statusCodeEquals(200);
 
-    $this->assertSession()->pageTextContains('Entity to Text (Tika): Private schema');
+    $this->assertSession()->pageTextContains('Entity to Text (Tika): Local File Storage (OCR cache)');
     $this->assertSession()->pageTextContains('Private file system is set and writtable.');
   }
 

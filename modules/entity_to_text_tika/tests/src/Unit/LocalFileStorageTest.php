@@ -5,7 +5,7 @@ namespace Drupal\Tests\entity_to_text_tika\Unit;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\StreamWrapper\StreamWrapperManagerInterface;
-use Drupal\entity_to_text_tika\Storage\PlaintextStorage;
+use Drupal\entity_to_text_tika\Storage\LocalFileStorage;
 use Drupal\file\Entity\File;
 use Drupal\Tests\TestFileCreationTrait;
 use Drupal\Tests\UnitTestCase;
@@ -16,14 +16,14 @@ use Psr\Log\LoggerInterface;
 /**
  * Tests the Plaintext File Storage.
  *
- * @coversDefaultClass \Drupal\entity_to_text_tika\Storage\PlaintextStorage
+ * @coversDefaultClass \Drupal\entity_to_text_tika\Storage\LocalFileStorage
  *
  * @group entity_to_text
  * @group entity_to_text_tika
  *
  * @internal
  */
-final class PlaintextStorageTest extends UnitTestCase {
+final class LocalFileStorageTest extends UnitTestCase {
   use TestFileCreationTrait;
 
   /**
@@ -64,9 +64,9 @@ final class PlaintextStorageTest extends UnitTestCase {
   /**
    * The plain-text storage processor.
    *
-   * @var \Drupal\entity_to_text_tika\Storage\PlaintextStorage
+   * @var \Drupal\entity_to_text_tika\Storage\LocalFileStorage
    */
-  protected PlaintextStorage $plaintextStorage;
+  protected LocalFileStorage $localFileStorage;
 
   /**
    * {@inheritdoc}
@@ -84,7 +84,7 @@ final class PlaintextStorageTest extends UnitTestCase {
     $this->loggerFactory->get('entity_to_text_tika')
       ->willReturn($this->logger->reveal())->shouldBeCalled();
 
-    $this->plaintextStorage = new PlaintextStorage($this->fileSystem->reveal(), $this->loggerFactory->reveal(), $this->streamWrapperManager->reveal());
+    $this->localFileStorage = new LocalFileStorage($this->fileSystem->reveal(), $this->loggerFactory->reveal(), $this->streamWrapperManager->reveal());
   }
 
   /**
@@ -98,9 +98,9 @@ final class PlaintextStorageTest extends UnitTestCase {
   }
 
   /**
-   * @covers ::saveTextToFile
+   * @covers ::save
    */
-  public function testSaveTextToFile(): void {
+  public function testSave(): void {
     // Create a test file object.
     $file = $this->prophet->prophesize(File::class);
     $file->id()
@@ -122,15 +122,15 @@ final class PlaintextStorageTest extends UnitTestCase {
     $this->fileSystem->prepareDirectory('private://entity-to-text/ocr', FileSystemInterface::CREATE_DIRECTORY)
       ->shouldBeCalled();
 
-    self::assertEquals('/tmp/199-test.pdf.en.ocr.txt', $this->plaintextStorage->saveTextToFile($file->reveal(), 'lorem ipsum', 'en'));
+    self::assertEquals('/tmp/199-test.pdf.en.ocr.txt', $this->localFileStorage->save($file->reveal(), 'lorem ipsum', 'en'));
     self::assertFileExists('/tmp/199-test.pdf.en.ocr.txt');
     self::assertEquals('lorem ipsum', file_get_contents('/tmp/199-test.pdf.en.ocr.txt'));
   }
 
   /**
-   * @covers ::saveTextToFile
+   * @covers ::save
    */
-  public function testSaveTextToFileInvalidScheme(): void {
+  public function testSaveInvalidScheme(): void {
     // Create a test file object.
     $file = $this->prophet->prophesize(File::class);
     $file->id()
@@ -152,14 +152,14 @@ final class PlaintextStorageTest extends UnitTestCase {
 
     $this->expectException(\RuntimeException::class);
     $this->expectExceptionMessage('The destination path is not a valid stream wrapper');
-    self::assertEquals('/tmp/199-test.pdf.en.ocr.txt', $this->plaintextStorage->saveTextToFile($file->reveal(), 'lorem ipsum', 'en'));
+    self::assertEquals('/tmp/199-test.pdf.en.ocr.txt', $this->localFileStorage->save($file->reveal(), 'lorem ipsum', 'en'));
     self::assertFileDoesNotExist('/tmp/199-test.pdf.en.ocr.txt');
   }
 
   /**
-   * @covers ::saveTextToFile
+   * @covers ::save
    */
-  public function testSaveTextToFileInvalidRealpath(): void {
+  public function testSaveInvalidRealpath(): void {
     // Create a test file object.
     $file = $this->prophet->prophesize(File::class);
     $file->id()
@@ -183,14 +183,14 @@ final class PlaintextStorageTest extends UnitTestCase {
 
     $this->expectException(\RuntimeException::class);
     $this->expectExceptionMessage('The resolved realpath from uri "private://entity-to-text/ocr" is not a valid directory.');
-    self::assertEquals('/tmp/199-test.pdf.en.ocr.txt', $this->plaintextStorage->saveTextToFile($file->reveal(), 'lorem ipsum', 'en'));
+    self::assertEquals('/tmp/199-test.pdf.en.ocr.txt', $this->localFileStorage->save($file->reveal(), 'lorem ipsum', 'en'));
     self::assertFileDoesNotExist('/tmp/199-test.pdf.en.ocr.txt');
   }
 
   /**
-   * @covers ::loadTextFromFile
+   * @covers ::load
    */
-  public function testLoadTextFromFileInvalidScheme(): void {
+  public function testloadInvalidScheme(): void {
     // Create a test file object.
     $file = $this->prophet->prophesize(File::class);
     $file->id()
@@ -206,21 +206,19 @@ final class PlaintextStorageTest extends UnitTestCase {
       ->shouldBeCalled();
 
     $this->fileSystem->realpath(Argument::any())->shouldNotBeCalled();
-
-    $this->fileSystem->prepareDirectory('private://entity-to-text/ocr', FileSystemInterface::CREATE_DIRECTORY)
-      ->shouldBeCalled();
+    $this->fileSystem->prepareDirectory(Argument::any())->shouldNotBeCalled()->shouldNotBeCalled();
 
     $this->expectException(\RuntimeException::class);
     $this->expectExceptionMessage('The destination path is not a valid stream wrapper');
-    self::assertEquals('/tmp/320-foo.pdf.en.ocr.txt', $this->plaintextStorage->loadTextFromFile($file->reveal(), 'en'));
+    self::assertEquals('/tmp/320-foo.pdf.en.ocr.txt', $this->localFileStorage->load($file->reveal(), 'en'));
     self::assertFileExists('/tmp/320-foo.pdf.en.ocr.txt');
     self::assertEquals('lorem ipsum', file_get_contents('/tmp/320-foo.pdf.en.ocr.txt'));
   }
 
   /**
-   * @covers ::loadTextFromFile
+   * @covers ::load
    */
-  public function testLoadTextFromFileInvalidRealpath(): void {
+  public function testloadInvalidRealpath(): void {
     // Create a test file object.
     $file = $this->prophet->prophesize(File::class);
     $file->id()
@@ -244,7 +242,7 @@ final class PlaintextStorageTest extends UnitTestCase {
 
     $this->expectException(\RuntimeException::class);
     $this->expectExceptionMessage('The resolved realpath from uri "private://entity-to-text/ocr" is not a valid directory.');
-    self::assertEquals('/tmp/199-test.pdf.en.ocr.txt', $this->plaintextStorage->saveTextToFile($file->reveal(), 'lorem ipsum', 'en'));
+    self::assertEquals('/tmp/199-test.pdf.en.ocr.txt', $this->localFileStorage->save($file->reveal(), 'lorem ipsum', 'en'));
     self::assertFileDoesNotExist('/tmp/199-test.pdf.en.ocr.txt');
   }
 
