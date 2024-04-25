@@ -88,6 +88,9 @@ $body = \Drupal::service('entity_to_text_tika.extractor.file_to_text')->fromFile
 or for an advanced usage avoiding multiple calls to Tika:
 
 ```php
+// Anywhere at least once in the code (Eg. module.install) in order to prepare the storage.
+\Drupal::service('entity_to_text_tika.storage.local_file')->prepareStorage();
+
 // Load the already OCR'ed file if possible to avoid unecessary calls to Tika.
 $body = \Drupal::service('entity_to_text_tika.storage.local_file')->load($file, 'eng+fra');
 

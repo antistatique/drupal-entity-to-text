@@ -119,9 +119,6 @@ final class LocalFileStorageTest extends UnitTestCase {
       ->willReturn('/tmp')
       ->shouldBeCalled();
 
-    $this->fileSystem->prepareDirectory('private://entity-to-text/ocr', FileSystemInterface::CREATE_DIRECTORY)
-      ->shouldBeCalled();
-
     self::assertEquals('/tmp/199-test.pdf.en.ocr.txt', $this->localFileStorage->save($file->reveal(), 'lorem ipsum', 'en'));
     self::assertFileExists('/tmp/199-test.pdf.en.ocr.txt');
     self::assertEquals('lorem ipsum', file_get_contents('/tmp/199-test.pdf.en.ocr.txt'));
@@ -139,9 +136,6 @@ final class LocalFileStorageTest extends UnitTestCase {
 
     $file->getFilename()
       ->willReturn('test.pdf')
-      ->shouldBeCalled();
-
-    $this->fileSystem->prepareDirectory('private://entity-to-text/ocr', FileSystemInterface::CREATE_DIRECTORY)
       ->shouldBeCalled();
 
     $this->streamWrapperManager->isValidScheme('private')
@@ -168,9 +162,6 @@ final class LocalFileStorageTest extends UnitTestCase {
 
     $file->getFilename()
       ->willReturn('test.pdf')
-      ->shouldBeCalled();
-
-    $this->fileSystem->prepareDirectory('private://entity-to-text/ocr', FileSystemInterface::CREATE_DIRECTORY)
       ->shouldBeCalled();
 
     $this->streamWrapperManager->isValidScheme('private')
@@ -206,7 +197,6 @@ final class LocalFileStorageTest extends UnitTestCase {
       ->shouldBeCalled();
 
     $this->fileSystem->realpath(Argument::any())->shouldNotBeCalled();
-    $this->fileSystem->prepareDirectory(Argument::any())->shouldNotBeCalled()->shouldNotBeCalled();
 
     $this->expectException(\RuntimeException::class);
     $this->expectExceptionMessage('The destination path is not a valid stream wrapper');
@@ -237,13 +227,20 @@ final class LocalFileStorageTest extends UnitTestCase {
       ->willReturn(FALSE)
       ->shouldBeCalled();
 
-    $this->fileSystem->prepareDirectory('private://entity-to-text/ocr', FileSystemInterface::CREATE_DIRECTORY)
-      ->shouldBeCalled();
-
     $this->expectException(\RuntimeException::class);
     $this->expectExceptionMessage('The resolved realpath from uri "private://entity-to-text/ocr" is not a valid directory.');
     self::assertEquals('/tmp/199-test.pdf.en.ocr.txt', $this->localFileStorage->save($file->reveal(), 'lorem ipsum', 'en'));
     self::assertFileDoesNotExist('/tmp/199-test.pdf.en.ocr.txt');
+  }
+
+  /**
+   * @covers ::prepareStorage
+   */
+  public function testPrepareStorage(): void {
+    self::expectNotToPerformAssertions();
+    $this->fileSystem->prepareDirectory('private://entity-to-text/ocr', FileSystemInterface::CREATE_DIRECTORY)
+      ->shouldBeCalled();
+    $this->localFileStorage->prepareStorage();
   }
 
 }

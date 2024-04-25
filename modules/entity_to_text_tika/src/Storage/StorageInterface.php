@@ -40,4 +40,9 @@ interface StorageInterface {
    */
   public function save(File $file, string $content, string $langcode = 'eng'): string;
 
+  /**
+   * Ensure the storage is ready to store OCR text values.
+   */
+  public function prepareStorage(): void;
+
 }

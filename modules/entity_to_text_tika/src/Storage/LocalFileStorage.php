@@ -62,8 +62,6 @@ class LocalFileStorage implements StorageInterface {
    * {@inheritdoc}
    */
   public function save(File $file, string $content, string $langcode = 'eng'): string {
-    $this->prepareDestination();
-
     $fullpath = $this->getFullPath($file, $langcode);
     file_put_contents($fullpath, $content);
     return $fullpath;
@@ -98,9 +96,9 @@ class LocalFileStorage implements StorageInterface {
   }
 
   /**
-   * Ensure the destination directory is ready to use.
+   * {@inheritdoc}
    */
-  private function prepareDestination(): void {
+  public function prepareStorage(): void {
     $dest = self::DESTINATION;
     $this->fileSystem->prepareDirectory($dest, FileSystemInterface::CREATE_DIRECTORY);
   }

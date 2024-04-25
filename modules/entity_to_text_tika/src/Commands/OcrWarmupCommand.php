@@ -91,18 +91,20 @@ class OcrWarmupCommand extends DrushCommands {
    * @usage drush e2t:t:w --fid=2
    *   Warmup the file with FID 2.
    */
-  public function warmup(array $options = [
-    'fid' => NULL,
-    'filemime' => [
-      'application/pdf', 'image/jpeg', 'image/png', 'image/tiff',
-      'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-      'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  public function warmup(
+    array $options = [
+      'fid' => NULL,
+      'filemime' => [
+        'application/pdf', 'image/jpeg', 'image/png', 'image/tiff',
+        'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      ],
+      'stop-on-failure' => FALSE,
+      'force' => FALSE,
+      'no-progress' => FALSE,
+      'dry-run' => FALSE,
     ],
-    'stop-on-failure' => FALSE,
-    'force' => FALSE,
-    'no-progress' => FALSE,
-    'dry-run' => FALSE,
-  ]): void {
+  ): void {
     $fid = $options['fid'];
     $filemime = (array) $options['filemime'];
     $stop_on_failure = (bool) $options['stop-on-failure'];
