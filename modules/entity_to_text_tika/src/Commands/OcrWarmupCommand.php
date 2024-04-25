@@ -69,6 +69,10 @@ class OcrWarmupCommand extends DrushCommands {
    *   'application/vnd.ms-excel',
    *   'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
    *   ].
+   * @option filesize-threshold
+   *   The maximum file size in bytes a document can be to be processed.
+   *   This is useful to avoid processing large files.
+   *   [defaults: NULL].
    * @option stop-on-failure
    *   Stop processing on first failed (Ex. Tika's down).
    *   [defaults: FALSE].
@@ -90,6 +94,10 @@ class OcrWarmupCommand extends DrushCommands {
    *   Warmup all files even if the files has already been processed before.
    * @usage drush e2t:t:w --fid=2
    *   Warmup the file with FID 2.
+   * @usage drush e2t:t:w --filemime=application/pdf
+   *   Warmup all PDF files.
+   * @usage drush e2t:t:w --filesize-threshold=1000000
+   *  Warmup all files that are lighter than 1Mb.
    */
   public function warmup(
     array $options = [
@@ -99,6 +107,7 @@ class OcrWarmupCommand extends DrushCommands {
         'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
       ],
+      'filesize-threshold' => NULL,
       'stop-on-failure' => FALSE,
       'force' => FALSE,
       'no-progress' => FALSE,
@@ -107,6 +116,7 @@ class OcrWarmupCommand extends DrushCommands {
   ): void {
     $fid = $options['fid'];
     $filemime = (array) $options['filemime'];
+    $filesize_threshold = $options['filesize-threshold'];
     $stop_on_failure = (bool) $options['stop-on-failure'];
     $force = (bool) $options['force'];
     $dry_run = (bool) $options['dry-run'];
@@ -144,6 +154,12 @@ class OcrWarmupCommand extends DrushCommands {
           $file = $this->fileStorage->load($file);
 
           $this->output()->writeln(sprintf('Processing file (%s) "%s".', $file->id(), $file->getFileUri()), OutputInterface::VERBOSITY_VERBOSE);
+
+          if ($filesize_threshold && $file->getSize() > $filesize_threshold) {
+            $this->output()->writeln(sprintf('File (%s) "%s" is too large to be processed (%d bytes).', $file->id(), $file->getFileUri(), $file->getSize()), OutputInterface::VERBOSITY_VERBOSE);
+            $progressbar_objects->advance();
+            continue;
+          }
 
           if ($dry_run) {
             $progressbar_objects->advance();

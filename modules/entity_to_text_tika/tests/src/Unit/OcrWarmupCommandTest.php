@@ -234,6 +234,7 @@ final class OcrWarmupCommandTest extends UnitTestCase {
       'filemime' => [
         'application/pdf',
       ],
+      'filesize-threshold' => NULL,
       'stop-on-failure' => FALSE,
       'force' => FALSE,
       'no-progress' => FALSE,
@@ -325,6 +326,7 @@ final class OcrWarmupCommandTest extends UnitTestCase {
       'filemime' => [
         'application/pdf',
       ],
+      'filesize-threshold' => NULL,
       'stop-on-failure' => FALSE,
       'force' => TRUE,
       'no-progress' => FALSE,
@@ -335,7 +337,7 @@ final class OcrWarmupCommandTest extends UnitTestCase {
   /**
    * @covers ::warmup
    */
-  public function testWarmupF(): void {
+  public function testWarmupFid(): void {
     $query = $this->createMock(QueryInterface::class);
     $query->expects($this->once())
       ->method('accessCheck')
@@ -395,6 +397,7 @@ final class OcrWarmupCommandTest extends UnitTestCase {
       'filemime' => [
         'application/pdf',
       ],
+      'filesize-threshold' => NULL,
       'stop-on-failure' => FALSE,
       'force' => FALSE,
       'no-progress' => FALSE,
