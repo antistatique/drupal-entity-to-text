@@ -82,6 +82,11 @@ class OcrWarmupCommand extends DrushCommands {
    *   The maximum file size in bytes a document can be to be processed.
    *   This is useful to avoid processing large files.
    *   [defaults: NULL].
+   * @option save-empty-ocr
+   *   Save an empty OCR file when the file is not processable.
+   *   Some files may not be processable by Tika (too large, corrupted, ...)
+   *   enabling this file may avoid processing the same file over and over.
+   *   [defaults: FALSE].
    * @option stop-on-failure
    *   Stop processing on first failed (Ex. Tika's down).
    *   [defaults: FALSE].
@@ -118,6 +123,7 @@ class OcrWarmupCommand extends DrushCommands {
       ],
       'filesize-threshold' => NULL,
       'stop-on-failure' => FALSE,
+      'save-empty-ocr' => FALSE,
       'force' => FALSE,
       'no-progress' => FALSE,
       'dry-run' => FALSE,
@@ -126,6 +132,7 @@ class OcrWarmupCommand extends DrushCommands {
     $fid = $options['fid'];
     $filemime = (array) $options['filemime'];
     $filesize_threshold = $options['filesize-threshold'];
+    $save_empty_ocr = (bool) $options['save-empty-ocr'];
     $stop_on_failure = (bool) $options['stop-on-failure'];
     $force = (bool) $options['force'];
     $dry_run = (bool) $options['dry-run'];
@@ -188,7 +195,10 @@ class OcrWarmupCommand extends DrushCommands {
             // When the OCR'ed file is not available, then run Tika over it
             // and store it for the next run.
             $body = $this->fileToText->fromFileToText($file, 'eng+fra');
-            $this->localFileStorage->save($file, $body, 'eng+fra');
+
+            if ($body !== '' || $save_empty_ocr) {
+              $this->localFileStorage->save($file, $body, 'eng+fra');
+            }
           }
 
           $progressbar_objects->advance();

@@ -242,6 +242,7 @@ final class OcrWarmupCommandTest extends UnitTestCase {
         'application/pdf',
       ],
       'filesize-threshold' => NULL,
+      'save-empty-ocr' => FALSE,
       'stop-on-failure' => FALSE,
       'force' => FALSE,
       'no-progress' => FALSE,
@@ -334,6 +335,7 @@ final class OcrWarmupCommandTest extends UnitTestCase {
         'application/pdf',
       ],
       'filesize-threshold' => NULL,
+      'save-empty-ocr' => FALSE,
       'stop-on-failure' => FALSE,
       'force' => TRUE,
       'no-progress' => FALSE,
@@ -405,6 +407,184 @@ final class OcrWarmupCommandTest extends UnitTestCase {
         'application/pdf',
       ],
       'filesize-threshold' => NULL,
+      'save-empty-ocr' => FALSE,
+      'stop-on-failure' => FALSE,
+      'force' => FALSE,
+      'no-progress' => FALSE,
+      'dry-run' => FALSE,
+    ]);
+  }
+
+  /**
+   * @covers ::warmup
+   */
+  public function testWarmupSaveEmptyOcr(): void {
+    $query = $this->createMock(QueryInterface::class);
+    $query->expects($this->once())
+      ->method('accessCheck')
+      ->with(FALSE);
+    $query->expects($this->once())
+      ->method('condition')
+      ->with('filemime', [
+        'application/pdf',
+      ]);
+    $query->expects($this->once())
+      ->method('count')
+      ->willReturnSelf();
+    $query->expects($this->exactly(2))
+      ->method('execute')
+      ->willReturnOnConsecutiveCalls(
+      // The first call is the cound query.
+        2,
+        // The second call is the actual query with files IDs.
+        [200, 2039],
+      );
+    $query->expects($this->once())
+      ->method('range')
+      ->with(0, 100);
+
+    $this->fileStorage->expects(self::once())
+      ->method('getQuery')
+      ->willReturn($query);
+
+    // Create a test file object.
+    $file200 = $this->createMock(File::class);
+    $file200->expects(self::once())
+      ->method('getFileUri')
+      ->willReturn('public://file/test.txt');
+    $file200->expects(self::once())
+      ->method('id')
+      ->willReturn(200);
+
+    // Create a test file object.
+    $file2039 = $this->createMock(File::class);
+    $file2039->expects(self::once())
+      ->method('getFileUri')
+      ->willReturn('public://file/foo.pdf');
+    $file2039->expects(self::once())
+      ->method('id')
+      ->willReturn(2039);
+
+    $this->fileStorage->expects($this->exactly(2))
+      ->method('load')
+      ->withConsecutive(
+        [200],
+        [2039],
+      )
+      ->willReturnOnConsecutiveCalls($file200, $file2039);
+
+    $this->localFileStorage->expects($this->exactly(2))
+      ->method('load')
+      ->withConsecutive(
+        [$file200, 'eng+fra'],
+        [$file2039, 'eng+fra'],
+      )
+      ->willReturnOnConsecutiveCalls('lorem ipsum', NULL);
+
+    $this->fileToText->expects($this->once())
+      ->method('fromFileToText')
+      ->with($file2039, 'eng+fra')
+      ->willReturn('');
+
+    $this->localFileStorage->expects($this->once())
+      ->method('save')
+      ->with($file2039, '', 'eng+fra');
+
+    $this->warmupCommand->warmup([
+      'fid' => NULL,
+      'filemime' => [
+        'application/pdf',
+      ],
+      'filesize-threshold' => NULL,
+      'save-empty-ocr' => TRUE,
+      'stop-on-failure' => FALSE,
+      'force' => FALSE,
+      'no-progress' => FALSE,
+      'dry-run' => FALSE,
+    ]);
+  }
+
+  /**
+   * @covers ::warmup
+   */
+  public function testWarmupNoSaveEmptyOcr(): void {
+    $query = $this->createMock(QueryInterface::class);
+    $query->expects($this->once())
+      ->method('accessCheck')
+      ->with(FALSE);
+    $query->expects($this->once())
+      ->method('condition')
+      ->with('filemime', [
+        'application/pdf',
+      ]);
+    $query->expects($this->once())
+      ->method('count')
+      ->willReturnSelf();
+    $query->expects($this->exactly(2))
+      ->method('execute')
+      ->willReturnOnConsecutiveCalls(
+      // The first call is the cound query.
+        2,
+        // The second call is the actual query with files IDs.
+        [200, 2039],
+      );
+    $query->expects($this->once())
+      ->method('range')
+      ->with(0, 100);
+
+    $this->fileStorage->expects(self::once())
+      ->method('getQuery')
+      ->willReturn($query);
+
+    // Create a test file object.
+    $file200 = $this->createMock(File::class);
+    $file200->expects(self::once())
+      ->method('getFileUri')
+      ->willReturn('public://file/test.txt');
+    $file200->expects(self::once())
+      ->method('id')
+      ->willReturn(200);
+
+    // Create a test file object.
+    $file2039 = $this->createMock(File::class);
+    $file2039->expects(self::once())
+      ->method('getFileUri')
+      ->willReturn('public://file/foo.pdf');
+    $file2039->expects(self::once())
+      ->method('id')
+      ->willReturn(2039);
+
+    $this->fileStorage->expects($this->exactly(2))
+      ->method('load')
+      ->withConsecutive(
+        [200],
+        [2039],
+      )
+      ->willReturnOnConsecutiveCalls($file200, $file2039);
+
+    $this->localFileStorage->expects($this->exactly(2))
+      ->method('load')
+      ->withConsecutive(
+        [$file200, 'eng+fra'],
+        [$file2039, 'eng+fra'],
+      )
+      ->willReturnOnConsecutiveCalls('lorem ipsum', NULL);
+
+    $this->fileToText->expects($this->once())
+      ->method('fromFileToText')
+      ->with($file2039, 'eng+fra')
+      ->willReturn('');
+
+    $this->localFileStorage->expects($this->never())
+      ->method('save');
+
+    $this->warmupCommand->warmup([
+      'fid' => NULL,
+      'filemime' => [
+        'application/pdf',
+      ],
+      'filesize-threshold' => NULL,
+      'save-empty-ocr' => FALSE,
       'stop-on-failure' => FALSE,
       'force' => FALSE,
       'no-progress' => FALSE,
