@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\entity_to_text_tika\Unit;
 
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\Query\QueryInterface;
@@ -58,6 +59,11 @@ final class OcrWarmupCommandTest extends UnitTestCase {
   protected function setUp(): void {
     parent::setUp();
 
+    $database = $this->createMock(Connection::class);
+    $database->expects(self::once())
+      ->method('query')
+      ->with('SET wait_timeout = 70');
+
     $this->fileStorage = $this->createMock(EntityStorageInterface::class);
     $entity_type_manager = $this->createMock(EntityTypeManagerInterface::class);
     $entity_type_manager->expects(self::once())
@@ -69,6 +75,7 @@ final class OcrWarmupCommandTest extends UnitTestCase {
     $this->fileToText = $this->createMock(FileToText::class);
 
     $this->warmupCommand = new OcrWarmupCommand(
+      $database,
       $entity_type_manager,
       $this->fileToText,
       $this->localFileStorage,

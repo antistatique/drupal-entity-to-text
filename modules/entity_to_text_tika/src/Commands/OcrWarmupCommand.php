@@ -2,6 +2,7 @@
 
 namespace Drupal\entity_to_text_tika\Commands;
 
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\entity_to_text_tika\Extractor\FileToText;
 use Drupal\entity_to_text_tika\Storage\StorageInterface;
@@ -20,6 +21,13 @@ class OcrWarmupCommand extends DrushCommands {
    * @var int
    */
   public const LIMIT_PAGER = 100;
+
+  /**
+   * The database connection.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  protected $connection;
 
   /**
    * The file storage service.
@@ -45,7 +53,8 @@ class OcrWarmupCommand extends DrushCommands {
   /**
    * Warmup OCR caches for Tika constructor.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, FileToText $file_to_text, StorageInterface $local_storage) {
+  public function __construct(Connection $connection, EntityTypeManagerInterface $entity_type_manager, FileToText $file_to_text, StorageInterface $local_storage) {
+    $this->connection = $connection;
     $this->fileStorage = $entity_type_manager->getStorage('file');
     $this->fileToText = $file_to_text;
     $this->localFileStorage = $local_storage;
@@ -120,6 +129,12 @@ class OcrWarmupCommand extends DrushCommands {
     $stop_on_failure = (bool) $options['stop-on-failure'];
     $force = (bool) $options['force'];
     $dry_run = (bool) $options['dry-run'];
+
+    // Raise the database connection timeout to 70 seconds.
+    // Tika default timeout is 60 seconds therefore having a lower value
+    // for database timeout may lead to MySQL server has gone away.
+    // @see \Drupal\entity_to_text_tika\Extractor\FileToText::getClient().
+    $this->connection->query('SET wait_timeout = 70');
 
     $query = $this->fileStorage->getQuery();
     $query->accessCheck(FALSE);
