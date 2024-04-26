@@ -169,7 +169,7 @@ class OcrWarmupCommand extends DrushCommands {
           // Load the already OCR'ed file if possible.
           $body = $this->localFileStorage->load($file, 'eng+fra');
 
-          if (!$body || $force) {
+          if ($body === NULL || $force) {
             // When the OCR'ed file is not available, then run Tika over it
             // and store it for the next run.
             $body = $this->fileToText->fromFileToText($file, 'eng+fra');
