@@ -85,6 +85,42 @@ $file = $file_item->entity;
 $body = \Drupal::service('entity_to_text_tika.extractor.file_to_text')->fromFileToText($file, 'eng+fra');
 ```
 
+or for an advanced usage avoiding multiple calls to Tika by using cached ocr file:
+
+```php
+// Anywhere at least once in the code (Eg. module.install) in order to prepare the storage.
+\Drupal::service('entity_to_text_tika.storage.local_file')->prepareStorage();
+
+// Load the already OCR'ed file if possible to avoid unecessary calls to Tika.
+$body = \Drupal::service('entity_to_text_tika.storage.local_file')->load($file, 'eng+fra');
+
+if (!$body) {
+  // When the OCR'ed file is not available, then run Tika over it and store it for the next run.
+  $body = \Drupal::service('entity_to_text_tika.extractor.file_to_text')->fromFileToText($file, 'eng+fra');
+  // Save the OCR'ed file for the next run.
+  \Drupal::service('entity_to_text_tika.storage.local_file')->save($file, $body, 'eng+fra');
+}
+```
+
+### Generate OCR via CLI
+
+The module provides a Drush command for generating OCR (Optical Character Recognition) for all files within Drupal.
+_It's important to note that this command should be used judiciously due to its potential resource intensity._
+
+Its primary objective is to generate OCR for files that have not undergone OCR processing yet.
+It's designed to work seamlessly with the Advanced feature set, leveraging cached OCR files efficiently.
+This command proves especially useful after a fresh installation, the addition of a new OCR language,
+or during file migrations.
+
+```bash
+# Warmup all files that does not already have an associated .ocr file.
+drush e2t:t:w
+# Warmup all files even if the files has already been processed before.
+drush e2t:t:w --force
+# Warmup the file with FID 2.
+drush e2t:t:w --fid=2
+```
+
 ## Supporting organizations
 
 This project is sponsored by [Antistatique](https://www.antistatique.net), a Swiss Web Agency.

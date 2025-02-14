@@ -7,3 +7,11 @@ services:
       - '@file_system'
       - '@logger.factory'
       - '@event_dispatcher'
+
+  # Storage
+  entity_to_text_tika.storage.local_file:
+    class: Drupal\entity_to_text_tika\Storage\LocalFileStorage
+    arguments:
+      - '@file_system'
+      - '@logger.factory'
+      - '@stream_wrapper_manager'

@@ -8,7 +8,6 @@ ENV BASE_IMAGE_TAG=${BASE_IMAGE_TAG}
 # @see https://www.drupal.org/project/drupal/issues/3403491
 ENV SYMFONY_DEPRECATIONS_HELPER=weak
 
-
 # Install ezyang/htmlpurifier as required by entity_to_text
 RUN COMPOSER_MEMORY_LIMIT=-1 composer require "ezyang/htmlpurifier:^4.14"
 
@@ -16,8 +15,11 @@ RUN COMPOSER_MEMORY_LIMIT=-1 composer require "ezyang/htmlpurifier:^4.14"
 RUN COMPOSER_MEMORY_LIMIT=-1 composer require "vaites/php-apache-tika:^1.2"
 
 # Install drupal/paragraphs as required by entity_to_text_paragraphs
+RUN COMPOSER_MEMORY_LIMIT=-1 composer config minimum-stability dev
 RUN COMPOSER_MEMORY_LIMIT=-1 composer require "drupal/paragraphs:^1.14"
 RUN COMPOSER_MEMORY_LIMIT=-1 composer require --dev "drupal/entity_browser"
+RUN COMPOSER_MEMORY_LIMIT=-1 composer require --dev "drupal/feeds"
+RUN COMPOSER_MEMORY_LIMIT=-1 composer require --dev "drupal/pathauto"
 
 # Register the Drupal and DrupalPractice Standard with PHPCS.
 #RUN ./vendor/bin/phpcs --config-set installed_paths \

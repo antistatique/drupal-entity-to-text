@@ -1,0 +1,10 @@
+services:
+  entity_to_text_tika.ocr_local_file_warmup_command:
+    class: \Drupal\entity_to_text_tika\Commands\OcrLocalFileCacheWarmup
+    arguments:
+      - '@database'
+      - '@entity_type.manager'
+      - '@entity_to_text_tika.extractor.file_to_text'
+      - '@entity_to_text_tika.storage.local_file'
+    tags:
+      - { name: drush.command }
