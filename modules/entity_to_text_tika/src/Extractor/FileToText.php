@@ -115,7 +115,7 @@ class FileToText {
    *
    * @param string|null $param1
    *   Path or host.
-   * @param string|int|null $param2
+   * @param int|string|null $param2
    *   Java binary path or port for web client.
    * @param array $options
    *   Options for cURL request.
@@ -127,7 +127,7 @@ class FileToText {
    *
    * @throws \Exception
    */
-  public function getClient(string $param1 = NULL, $param2 = NULL, array $options = [], bool $check = TRUE): Client {
+  public function getClient(?string $param1 = NULL, int|string|null $param2 = NULL, array $options = [], bool $check = TRUE): Client {
     if (!$this->client) {
       $this->client = Client::make($param1, $param2, $options, $check);
       $this->client->setTimeout(60);

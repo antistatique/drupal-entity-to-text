@@ -1,6 +1,6 @@
 services:
-  entity_to_text_tika.ocr_warmup_command:
-    class: \Drupal\entity_to_text_tika\Commands\OcrWarmupCommand
+  entity_to_text_tika.ocr_local_file_warmup_command:
+    class: \Drupal\entity_to_text_tika\Commands\OcrLocalFileCacheWarmup
     arguments:
       - '@database'
       - '@entity_type.manager'

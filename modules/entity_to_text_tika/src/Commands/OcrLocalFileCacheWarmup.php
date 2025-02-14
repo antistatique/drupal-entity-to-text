@@ -11,9 +11,9 @@ use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Drush Command to Warmup the Tika OCR Cache.
+ * Drush Command to Warmup the Tika OCR Local File Cache.
  */
-class OcrWarmupCommand extends DrushCommands {
+class OcrLocalFileCacheWarmup extends DrushCommands {
 
   /**
    * The number of object processed by pages.

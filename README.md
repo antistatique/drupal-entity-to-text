@@ -85,7 +85,7 @@ $file = $file_item->entity;
 $body = \Drupal::service('entity_to_text_tika.extractor.file_to_text')->fromFileToText($file, 'eng+fra');
 ```
 
-or for an advanced usage avoiding multiple calls to Tika:
+or for an advanced usage avoiding multiple calls to Tika by using cached ocr file:
 
 ```php
 // Anywhere at least once in the code (Eg. module.install) in order to prepare the storage.
@@ -104,11 +104,13 @@ if (!$body) {
 
 ### Generate OCR via CLI
 
-The module expose a Drush command to generate OCR for all Drupal files.
+The module provides a Drush command for generating OCR (Optical Character Recognition) for all files within Drupal.
+_It's important to note that this command should be used judiciously due to its potential resource intensity._
 
-This command is intended to be used sporadically, as it can be resource intensive.
-The purpose is to generate OCR for all files that have not been OCR'ed yet.
-This may be usefully after an initial install, a new OCR language has been added or right after files migration.
+Its primary objective is to generate OCR for files that have not undergone OCR processing yet.
+It's designed to work seamlessly with the Advanced feature set, leveraging cached OCR files efficiently.
+This command proves especially useful after a fresh installation, the addition of a new OCR language,
+or during file migrations.
 
 ```bash
 # Warmup all files that does not already have an associated .ocr file.

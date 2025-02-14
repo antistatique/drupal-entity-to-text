@@ -6,7 +6,7 @@ use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\Query\QueryInterface;
-use Drupal\entity_to_text_tika\Commands\OcrWarmupCommand;
+use Drupal\entity_to_text_tika\Commands\OcrLocalFileCacheWarmup;
 use Drupal\entity_to_text_tika\Extractor\FileToText;
 use Drupal\entity_to_text_tika\Storage\StorageInterface;
 use Drupal\file\Entity\File;
@@ -16,14 +16,14 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * @coversDefaultClass \Drupal\entity_to_text_tika\Commands\OcrWarmupCommand
+ * @coversDefaultClass \Drupal\entity_to_text_tika\Commands\OcrLocalFileCacheWarmup
  *
  * @group entity_to_text
  * @group entity_to_text_tika
  *
  * @internal
  */
-final class OcrWarmupCommandTest extends UnitTestCase {
+final class OcrLocalFileCacheWarmupTest extends UnitTestCase {
 
   /**
    * A mocked file storage service.
@@ -49,7 +49,7 @@ final class OcrWarmupCommandTest extends UnitTestCase {
   /**
    * The command to test.
    *
-   * @var \Drupal\entity_to_text_tika\Commands\OcrWarmupCommand
+   * @var \Drupal\entity_to_text_tika\Commands\OcrLocalFileCacheWarmup
    */
   protected $warmupCommand;
 
@@ -74,7 +74,7 @@ final class OcrWarmupCommandTest extends UnitTestCase {
     $this->localFileStorage = $this->createMock(StorageInterface::class);
     $this->fileToText = $this->createMock(FileToText::class);
 
-    $this->warmupCommand = new OcrWarmupCommand(
+    $this->warmupCommand = new OcrLocalFileCacheWarmup(
       $database,
       $entity_type_manager,
       $this->fileToText,
