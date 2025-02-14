@@ -1,0 +1,15 @@
+includes:
+  - phar://phpstan.phar/conf/bleedingEdge.neon
+
+parameters:
+  level: 1
+  reportUnmatchedIgnoredErrors: false
+  ignoreErrors:
+    # The module support Drupal 9, 10 and Drupal 11, so we cannot fix that deprecation without dropping support of 10.3.x and below.
+    -
+      message: """
+        #^Fetching deprecated class constant EXISTS_REPLACE of interface#
+      """
+      count: 4
+      path: tests/src/Kernel/LocalFileStorageTest.php
+

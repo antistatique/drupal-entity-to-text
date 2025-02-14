@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - add a new layer of performance by allowing developers to cache OCR'ed files
 - add command entity_to_text:tika:warmup
 - add cpsell project words for Gitlab-CI
+- add official support of drupal 11.1
 
 ## [1.0.0] - 2023-01-27
 ### Added
