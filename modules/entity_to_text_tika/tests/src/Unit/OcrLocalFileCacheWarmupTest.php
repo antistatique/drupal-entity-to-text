@@ -145,19 +145,17 @@ final class OcrLocalFileCacheWarmupTest extends UnitTestCase {
 
     $this->fileStorage->expects($this->exactly(2))
       ->method('load')
-      ->withConsecutive(
-        [200],
-        [2039],
-      )
-      ->willReturnOnConsecutiveCalls($file200, $file2039);
+      ->willReturnMap([
+        [200, $file200],
+        [2039, $file2039],
+      ]);
 
     $this->localFileStorage->expects($this->exactly(2))
       ->method('load')
-      ->withConsecutive(
-        [$file200, 'eng+fra'],
-        [$file2039, 'eng+fra'],
-      )
-      ->willReturnOnConsecutiveCalls('lorem ipsum', NULL);
+      ->willReturnMap([
+        [$file200, 'eng+fra', 'lorem ipsum'],
+        [$file2039, 'eng+fra', NULL],
+      ]);
 
     $this->fileToText->expects($this->once())
       ->method('fromFileToText')
@@ -221,11 +219,10 @@ final class OcrLocalFileCacheWarmupTest extends UnitTestCase {
 
     $this->fileStorage->expects($this->exactly(2))
       ->method('load')
-      ->withConsecutive(
-        [200],
-        [2039],
-      )
-      ->willReturnOnConsecutiveCalls($file200, $file2039);
+      ->willReturnMap([
+        [200, $file200],
+        [2039, $file2039],
+      ]);
 
     $this->localFileStorage->expects($this->never())
       ->method('load');
@@ -267,7 +264,7 @@ final class OcrLocalFileCacheWarmupTest extends UnitTestCase {
     $query->expects($this->exactly(2))
       ->method('execute')
       ->willReturnOnConsecutiveCalls(
-      // The first call is the cound query.
+        // The first call is the count query.
         2,
         // The second call is the actual query with files IDs.
         [200, 2039],
@@ -300,33 +297,32 @@ final class OcrLocalFileCacheWarmupTest extends UnitTestCase {
 
     $this->fileStorage->expects($this->exactly(2))
       ->method('load')
-      ->withConsecutive(
-        [200],
-        [2039],
-      )
-      ->willReturnOnConsecutiveCalls($file200, $file2039);
+      ->willReturnMap([
+        [200, $file200],
+        [2039, $file2039],
+      ]);
 
     $this->localFileStorage->expects($this->exactly(2))
       ->method('load')
-      ->withConsecutive(
-        [$file200, 'eng+fra'],
-        [$file2039, 'eng+fra'],
-      )
-      ->willReturnOnConsecutiveCalls('lorem ipsum', NULL);
+      ->willReturnMap([
+        [$file200, 'eng+fra', 'lorem ipsum'],
+        [$file2039, 'eng+fra', NULL],
+      ]);
 
     $this->fileToText->expects($this->exactly(2))
       ->method('fromFileToText')
-      ->withConsecutive(
-        [$file200, 'eng+fra'],
-        [$file2039, 'eng+fra'],
-      )
-      ->willReturn('doloreum', 'ipsum');
+      ->willReturnMap([
+        [$file200, 'eng+fra', 'doloreum'],
+        [$file2039, 'eng+fra', 'ipsum'],
+      ]);
 
     $this->localFileStorage->expects($this->exactly(2))
       ->method('save')
-      ->withConsecutive(
-        [$file2039, 'doloreum', 'eng+fra'],
-        [$file2039, 'ipsum', 'eng+fra'],
+      ->with(
+        $this->logicalOr(
+          $this->equalTo([$file2039, 'doloreum', 'eng+fra']),
+          $this->equalTo([$file2039, 'ipsum', 'eng+fra'])
+        )
       );
 
     $this->warmupCommand->warmup([
@@ -467,19 +463,17 @@ final class OcrLocalFileCacheWarmupTest extends UnitTestCase {
 
     $this->fileStorage->expects($this->exactly(2))
       ->method('load')
-      ->withConsecutive(
-        [200],
-        [2039],
-      )
-      ->willReturnOnConsecutiveCalls($file200, $file2039);
+      ->willReturnMap([
+        [200, $file200],
+        [2039, $file2039],
+      ]);
 
     $this->localFileStorage->expects($this->exactly(2))
       ->method('load')
-      ->withConsecutive(
-        [$file200, 'eng+fra'],
-        [$file2039, 'eng+fra'],
-      )
-      ->willReturnOnConsecutiveCalls('lorem ipsum', NULL);
+      ->willReturnMap([
+        [$file200, 'eng+fra', 'lorem ipsum'],
+        [$file2039, 'eng+fra', NULL],
+      ]);
 
     $this->fileToText->expects($this->once())
       ->method('fromFileToText')
@@ -556,19 +550,17 @@ final class OcrLocalFileCacheWarmupTest extends UnitTestCase {
 
     $this->fileStorage->expects($this->exactly(2))
       ->method('load')
-      ->withConsecutive(
-        [200],
-        [2039],
-      )
-      ->willReturnOnConsecutiveCalls($file200, $file2039);
+      ->willReturnMap([
+        [200, $file200],
+        [2039, $file2039],
+      ]);
 
     $this->localFileStorage->expects($this->exactly(2))
       ->method('load')
-      ->withConsecutive(
-        [$file200, 'eng+fra'],
-        [$file2039, 'eng+fra'],
-      )
-      ->willReturnOnConsecutiveCalls('lorem ipsum', NULL);
+      ->willReturnMap([
+        [$file200, 'eng+fra', 'lorem ipsum'],
+        [$file2039, 'eng+fra', NULL],
+      ]);
 
     $this->fileToText->expects($this->once())
       ->method('fromFileToText')

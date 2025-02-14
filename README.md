@@ -26,6 +26,7 @@ The submodule `entity_to_text_paragraphs` requires the library `drupal/paragraph
 |     8.x     |       -        |
 |     9.x     |     1.0.x      |
 |    10.x     |     1.0.x      |
+|    11.x     |     1.0.x      |
 
 ## Getting Started
 
