@@ -18,7 +18,7 @@ class EntityToTextTikaEventsTest extends UnitTestCase {
    *
    * @dataProvider eventNames
    */
-  public function testEventNames($event_name, $expected) {
+  public function testEventNames($event_name, $expected): void {
     $this->assertEquals($expected, $event_name);
   }
 
@@ -28,7 +28,7 @@ class EntityToTextTikaEventsTest extends UnitTestCase {
    * @return array
    *   The list of CONST names & string expected value.
    */
-  public function eventNames() {
+  public static function eventNames(): iterable {
     return [
       [
         EntityToTextTikaEvents::PRE_PROCESS_FILE,

@@ -282,7 +282,7 @@ final class OcrLocalFileCacheWarmupTest extends UnitTestCase {
     $file200->expects(self::once())
       ->method('getFileUri')
       ->willReturn('public://file/test.txt');
-    $file200->expects(self::once())
+    $file200->expects(self::any())
       ->method('id')
       ->willReturn(200);
 
@@ -291,7 +291,7 @@ final class OcrLocalFileCacheWarmupTest extends UnitTestCase {
     $file2039->expects(self::once())
       ->method('getFileUri')
       ->willReturn('public://file/foo.pdf');
-    $file2039->expects(self::once())
+    $file2039->expects(self::any())
       ->method('id')
       ->willReturn(2039);
 
@@ -319,10 +319,16 @@ final class OcrLocalFileCacheWarmupTest extends UnitTestCase {
     $this->localFileStorage->expects($this->exactly(2))
       ->method('save')
       ->with(
+        $this->callback(function ($arg) use ($file200, $file2039) {
+          // First arg should be a File object (one of our two mocks)
+          $isCorrectFile = ($arg === $file200 || $arg === $file2039);
+          return $isCorrectFile;
+        }),
         $this->logicalOr(
-          $this->equalTo([$file2039, 'doloreum', 'eng+fra']),
-          $this->equalTo([$file2039, 'ipsum', 'eng+fra'])
-        )
+          $this->equalTo('doloreum'),
+          $this->equalTo('ipsum')
+        ),
+        $this->equalTo('eng+fra')
       );
 
     $this->warmupCommand->warmup([

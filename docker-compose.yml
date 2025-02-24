@@ -8,6 +8,7 @@ services:
     volumes:
       # Mount the module in the proper contrib module directory.
       - .:/var/www/html/modules/contrib/entity_to_text
+
     restart: unless-stopped
 
   db:

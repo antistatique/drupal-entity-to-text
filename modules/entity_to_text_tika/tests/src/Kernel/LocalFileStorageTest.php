@@ -3,9 +3,12 @@
 namespace Drupal\Tests\entity_to_text_tika\Kernel;
 
 use Drupal\Core\File\FileSystemInterface;
+use Drupal\Core\StreamWrapper\PrivateStream;
+use Drupal\Core\StreamWrapper\StreamWrapperInterface;
 use Drupal\entity_to_text_tika\Storage\LocalFileStorage;
 use Drupal\file\Entity\File;
 use Drupal\KernelTests\Core\File\FileTestBase;
+use Drupal\Core\File\FileExists;
 
 /**
  * Tests the Plaintext File Storage.
@@ -22,7 +25,7 @@ final class LocalFileStorageTest extends FileTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['file', 'entity_to_text_tika', 'user'];
+  protected static $modules = ['system', 'file', 'entity_to_text_tika', 'user'];
 
   /**
    * The file system service.
@@ -61,7 +64,7 @@ final class LocalFileStorageTest extends FileTestBase {
   public function testloadPublic(): void {
     // Create an OCR file for testing.
     $file_uri = $this->createUri('390-foo.txt.en.ocr.txt', 'Ipsum excepteur id cupidatat commodo', 'private');
-    $this->fileSystem->move($file_uri, 'private://entity-to-text/ocr/390-foo.txt.en.ocr.txt', FileSystemInterface::EXISTS_REPLACE);
+    $this->fileSystem->move($file_uri, 'private://entity-to-text/ocr/390-foo.txt.en.ocr.txt', FileExists::Replace);
 
     // Create a file that correspond to the previous OCR file.
     $file = File::create([
@@ -79,7 +82,7 @@ final class LocalFileStorageTest extends FileTestBase {
   public function testloadPrivate(): void {
     // Create an OCR file for testing.
     $file_uri = $this->createUri('390-foo.txt.en.ocr.txt', 'Ipsum excepteur id cupidatat commodo', 'private');
-    $this->fileSystem->move($file_uri, 'private://entity-to-text/ocr/390-foo.txt.en.ocr.txt', FileSystemInterface::EXISTS_REPLACE);
+    $this->fileSystem->move($file_uri, 'private://entity-to-text/ocr/390-foo.txt.en.ocr.txt', FileExists::Replace);
 
     // Create a file that correspond to the previous OCR file.
     $file = File::create([
@@ -97,7 +100,7 @@ final class LocalFileStorageTest extends FileTestBase {
   public function testloadSubDirectory(): void {
     // Create an OCR file for testing.
     $file_uri = $this->createUri('420-foo.txt.en.ocr.txt', 'Ipsum excepteur id cupidatat commodo', 'private');
-    $this->fileSystem->move($file_uri, 'private://entity-to-text/ocr/420-foo.txt.en.ocr.txt', FileSystemInterface::EXISTS_REPLACE);
+    $this->fileSystem->move($file_uri, 'private://entity-to-text/ocr/420-foo.txt.en.ocr.txt', FileExists::Replace);
 
     // Create a file that correspond to the previous OCR file.
     $file = File::create([
@@ -148,7 +151,7 @@ final class LocalFileStorageTest extends FileTestBase {
   public function testSaveWhenOcrFileAlreadyExists(): void {
     // Create an OCR file for testing.
     $file_ocr_uri = $this->createUri('400-foo.txt.en.ocr.txt', 'Ipsum excepteur id cupidatat commodo', 'private');
-    $this->fileSystem->move($file_ocr_uri, 'private://entity-to-text/ocr/400-foo.txt.en.ocr.txt', FileSystemInterface::EXISTS_REPLACE);
+    $this->fileSystem->move($file_ocr_uri, 'private://entity-to-text/ocr/400-foo.txt.en.ocr.txt', FileExists::Replace);
 
     // Create a file for testing.
     $file = File::create([

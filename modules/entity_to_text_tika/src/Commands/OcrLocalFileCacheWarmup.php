@@ -172,8 +172,9 @@ class OcrLocalFileCacheWarmup extends DrushCommands {
         $progressbar_objects->setMessage((string) $page, 'page_current');
         $base_query->range($page * self::LIMIT_PAGER, self::LIMIT_PAGER);
         $files = $base_query->execute();
-        foreach ($files as $file) {
-          $file = $this->fileStorage->load($file);
+
+        foreach ($files as $fid) {
+          $file = $this->fileStorage->load($fid);
 
           $this->output()->writeln(sprintf('Processing file (%s) "%s".', $file->id(), $file->getFileUri()), OutputInterface::VERBOSITY_VERBOSE);
 
