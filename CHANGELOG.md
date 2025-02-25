@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - fix D10 deprecations: Creation of dynamic property is deprecated
+- fix phpstan not finding coverage class fromParagraphToText
 
 ### Added
 - add event PRE_PROCESS_FILE to allow client or file alteration before Tika OCR

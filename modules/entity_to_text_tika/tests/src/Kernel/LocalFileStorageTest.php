@@ -3,8 +3,6 @@
 namespace Drupal\Tests\entity_to_text_tika\Kernel;
 
 use Drupal\Core\File\FileSystemInterface;
-use Drupal\Core\StreamWrapper\PrivateStream;
-use Drupal\Core\StreamWrapper\StreamWrapperInterface;
 use Drupal\entity_to_text_tika\Storage\LocalFileStorage;
 use Drupal\file\Entity\File;
 use Drupal\KernelTests\Core\File\FileTestBase;

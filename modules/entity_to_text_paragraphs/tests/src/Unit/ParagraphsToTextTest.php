@@ -87,7 +87,7 @@ final class ParagraphsToTextTest extends UnitTestCase {
   }
 
   /**
-   * @covers ::fromParagraphToText()
+   * @covers ::fromParagraphToText
    */
   public function testFromParagraphToTextEmpty(): void {
     // Create an empty test Paragraphs collection object list.
@@ -98,7 +98,7 @@ final class ParagraphsToTextTest extends UnitTestCase {
   }
 
   /**
-   * @covers ::fromParagraphToText()
+   * @covers ::fromParagraphToText
    */
   public function testFromParagraphToText(): void {
     $paragraph1 = $this->prophet->prophesize(Paragraph::class);
