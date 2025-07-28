@@ -34,13 +34,7 @@ class InstallUninstallTest extends ModuleTestBase {
     $edit['modules[entity_to_text_tika][enable]'] = 'entity_to_text_tika';
     $this->drupalGet('admin/modules');
     $this->submitForm($edit, 'Install');
-
-    if (version_compare(\Drupal::VERSION, '10.3', '>=')) {
-      $this->assertSession()->pageTextContains('Module Entity to Text - Tika has been installed.');
-    }
-    else {
-      $this->assertSession()->pageTextContains('Module Entity to Text - Tika has been enabled.');
-    }
+    $this->assertSession()->pageTextContains('Module Entity to Text - Tika has been installed.');
 
     // Makes sure the module has been installed.
     $this->assertModules(['entity_to_text_tika'], TRUE);

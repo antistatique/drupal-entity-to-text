@@ -10,10 +10,13 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        drupal_version: ['10.4', '11.0', '11.1']
+        drupal_version: ['10.4', '10.5', '11.0', '11.1']
         module: ['entity_to_text']
         include:
           - drupal_version: '11.2'
+            module: 'entity_to_text'
+            experimental: true
+          - drupal_version: '11.3'
             module: 'entity_to_text'
             experimental: true
 
@@ -38,10 +41,13 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        drupal_version: ['10.4', '11.0', '11.1']
+        drupal_version: ['10.4', '10.5', '11.0', '11.1']
         module: ['entity_to_text']
         include:
           - drupal_version: '11.2'
+            module: 'entity_to_text'
+            experimental: true
+          - drupal_version: '11.3'
             module: 'entity_to_text'
             experimental: true
 
@@ -66,7 +72,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        drupal_version: ['10.4']
+        drupal_version: ['10.5']
         module: ['entity_to_text']
 
     steps:
