@@ -13,7 +13,6 @@ build:
         commands:
           - cd ${SOURCE_DIR}
           - sudo composer require "ezyang/htmlpurifier:^4.14" "drupal/paragraphs:^1.14" "vaites/php-apache-tika:^1.2" --no-scripts
-          - sudo composer require --dev "drupal/entity_browser" --no-scripts
       run_tests.standard:
         types: 'Simpletest,PHPUnit-Unit,PHPUnit-Kernel,PHPUnit-Functional'
       run_tests.js:

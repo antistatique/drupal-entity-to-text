@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Removed
+- remove direct dependenceis on drupal/entity_browser
+- remove direct dependenceis on drupal/pathauto
+- remove direct dependenceis on drupal/feeds
 
 ## [1.3.0] - 2025-11-07
 ### Added
