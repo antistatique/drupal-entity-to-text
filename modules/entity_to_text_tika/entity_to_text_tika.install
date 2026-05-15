@@ -5,41 +5,26 @@
  * Install, update and uninstall fn for the Entity to Text Tika sub-module.
  */
 
+use Drupal\Core\Hook\Attribute\LegacyRequirementsHook;
+use Drupal\entity_to_text_tika\Hook\EntityToTextTikaRequirementsHook;
+
 /**
  * Implements hook_requirements().
+ *
+ * @deprecated in drupal:11.2.0 and is removed from drupal:12.0.0. Use
+ *   hook_runtime_requirements() for runtime checks instead.
+ *
+ * @see https://www.drupal.org/node/3490851
  */
+#[LegacyRequirementsHook]
 function entity_to_text_tika_requirements($phase = 'runtime') {
-  $requirements = [];
+  if ($phase !== 'runtime') {
+    return [];
+  }
+
   $stream_wrapper_manager = \Drupal::service('stream_wrapper_manager');
   $file_system = \Drupal::service('file_system');
+  $hook = new EntityToTextTikaRequirementsHook($stream_wrapper_manager, $file_system);
 
-  /* ************************************************************************ */
-  // Check private file directory.
-  /* ************************************************************************ */
-
-  if ($phase !== 'runtime') {
-    return $requirements;
-  }
-
-  $requirements['entity_to_text_tika_private'] = [
-    'title' => t('Entity to Text (Tika): Local File Storage (OCR cache)'),
-    'description' => t('Entity to Text Tika expose a Local File Storage optimisation in order to store OCR of document in the private:// schema. The current private schema configuration can leverage it.'),
-    'value' => t('Private file system is set and writtable.'),
-  ];
-
-  // Check if the private file stream wrapper is ready to use.
-  if (!$stream_wrapper_manager->isValidScheme('private')) {
-    $requirements['entity_to_text_tika_private']['value'] = 'Private file system is not set.';
-    $requirements['entity_to_text_tika_private']['description'] = t('Entity to Text Tika expose a Local File Storage optimisation in order to store OCR of document in the private:// schema. The current private schema configuration cannot leverage it.');
-    $requirements['entity_to_text_tika_private']['severity'] = REQUIREMENT_INFO;
-  }
-
-  $private_path = $file_system->realpath('private://');
-  // Check if the private file stream wrapper is ready to use.
-  if (!is_dir($private_path) || !is_writable($private_path)) {
-    $requirements['entity_to_text_tika_private']['value'] = t('Entity to Text Tika expose a Local File Storage optimisation in order to store OCR of document in the private:// schema. The current private schema configuration cannot leverage it. The resolved private directory %directory% seems not writable.', ['%directory%' => $private_path]);
-    $requirements['entity_to_text_tika_private']['severity'] = REQUIREMENT_ERROR;
-  }
-
-  return $requirements;
+  return $hook->runtime();
 }
