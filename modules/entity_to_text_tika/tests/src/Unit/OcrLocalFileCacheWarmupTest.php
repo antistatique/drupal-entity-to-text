@@ -26,11 +26,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class OcrLocalFileCacheWarmupTest extends UnitTestCase {
 
   /**
-   * A mocked file storage service.
+   * A mocked entity type manager.
    *
-   * @var \Drupal\Core\Entity\EntityStorageInterface
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  protected $fileStorage;
+  protected $entityTypeManager;
 
   /**
    * A mocked Tika File to text service.
@@ -64,19 +64,14 @@ final class OcrLocalFileCacheWarmupTest extends UnitTestCase {
       ->method('query')
       ->with('SET wait_timeout = 70');
 
-    $this->fileStorage = $this->createMock(EntityStorageInterface::class);
-    $entity_type_manager = $this->createMock(EntityTypeManagerInterface::class);
-    $entity_type_manager->expects(self::once())
-      ->method('getStorage')
-      ->with('file')
-      ->willReturn($this->fileStorage);
+    $this->entityTypeManager = $this->createMock(EntityTypeManagerInterface::class);
 
     $this->localFileStorage = $this->createMock(StorageInterface::class);
     $this->fileToText = $this->createMock(FileToText::class);
 
     $this->warmupCommand = new OcrLocalFileCacheWarmup(
       $database,
-      $entity_type_manager,
+      $this->entityTypeManager,
       $this->fileToText,
       $this->localFileStorage,
     );
@@ -95,6 +90,12 @@ final class OcrLocalFileCacheWarmupTest extends UnitTestCase {
    * @covers ::warmup
    */
   public function testWarmup(): void {
+    $file_storage = $this->createMock(EntityStorageInterface::class);
+    $this->entityTypeManager->expects(self::once())
+      ->method('getStorage')
+      ->with('file')
+      ->willReturn($file_storage);
+
     $query = $this->createMock(QueryInterface::class);
     $query->expects($this->once())
       ->method('accessCheck')
@@ -121,7 +122,7 @@ final class OcrLocalFileCacheWarmupTest extends UnitTestCase {
       ->method('range')
       ->with(0, 100);
 
-    $this->fileStorage->expects(self::once())
+    $file_storage->expects(self::once())
       ->method('getQuery')
       ->willReturn($query);
 
@@ -143,7 +144,7 @@ final class OcrLocalFileCacheWarmupTest extends UnitTestCase {
       ->method('id')
       ->willReturn(2039);
 
-    $this->fileStorage->expects($this->exactly(2))
+    $file_storage->expects($this->exactly(2))
       ->method('load')
       ->willReturnMap([
         [200, $file200],
@@ -173,6 +174,12 @@ final class OcrLocalFileCacheWarmupTest extends UnitTestCase {
    * @covers ::warmup
    */
   public function testWarmupDryrun(): void {
+    $file_storage = $this->createMock(EntityStorageInterface::class);
+    $this->entityTypeManager->expects(self::once())
+      ->method('getStorage')
+      ->with('file')
+      ->willReturn($file_storage);
+
     $query = $this->createMock(QueryInterface::class);
     $query->expects($this->once())
       ->method('accessCheck')
@@ -195,7 +202,7 @@ final class OcrLocalFileCacheWarmupTest extends UnitTestCase {
       ->method('range')
       ->with(0, 100);
 
-    $this->fileStorage->expects(self::once())
+    $file_storage->expects(self::once())
       ->method('getQuery')
       ->willReturn($query);
 
@@ -217,7 +224,7 @@ final class OcrLocalFileCacheWarmupTest extends UnitTestCase {
       ->method('id')
       ->willReturn(2039);
 
-    $this->fileStorage->expects($this->exactly(2))
+    $file_storage->expects($this->exactly(2))
       ->method('load')
       ->willReturnMap([
         [200, $file200],
@@ -251,6 +258,12 @@ final class OcrLocalFileCacheWarmupTest extends UnitTestCase {
    * @covers ::warmup
    */
   public function testWarmupForce(): void {
+    $file_storage = $this->createMock(EntityStorageInterface::class);
+    $this->entityTypeManager->expects(self::once())
+      ->method('getStorage')
+      ->with('file')
+      ->willReturn($file_storage);
+
     $query = $this->createMock(QueryInterface::class);
     $query->expects($this->once())
       ->method('accessCheck')
@@ -273,7 +286,7 @@ final class OcrLocalFileCacheWarmupTest extends UnitTestCase {
       ->method('range')
       ->with(0, 100);
 
-    $this->fileStorage->expects(self::once())
+    $file_storage->expects(self::once())
       ->method('getQuery')
       ->willReturn($query);
 
@@ -295,7 +308,7 @@ final class OcrLocalFileCacheWarmupTest extends UnitTestCase {
       ->method('id')
       ->willReturn(2039);
 
-    $this->fileStorage->expects($this->exactly(2))
+    $file_storage->expects($this->exactly(2))
       ->method('load')
       ->willReturnMap([
         [200, $file200],
@@ -349,6 +362,12 @@ final class OcrLocalFileCacheWarmupTest extends UnitTestCase {
    * @covers ::warmup
    */
   public function testWarmupFid(): void {
+    $file_storage = $this->createMock(EntityStorageInterface::class);
+    $this->entityTypeManager->expects(self::once())
+      ->method('getStorage')
+      ->with('file')
+      ->willReturn($file_storage);
+
     $query = $this->createMock(QueryInterface::class);
     $query->expects($this->once())
       ->method('accessCheck')
@@ -371,7 +390,7 @@ final class OcrLocalFileCacheWarmupTest extends UnitTestCase {
       ->method('range')
       ->with(0, 100);
 
-    $this->fileStorage->expects(self::once())
+    $file_storage->expects(self::once())
       ->method('getQuery')
       ->willReturn($query);
 
@@ -384,7 +403,7 @@ final class OcrLocalFileCacheWarmupTest extends UnitTestCase {
       ->method('id')
       ->willReturn(200);
 
-    $this->fileStorage->expects($this->once())
+    $file_storage->expects($this->once())
       ->method('load')
       ->with(200)
       ->willReturn($file200);
@@ -421,6 +440,12 @@ final class OcrLocalFileCacheWarmupTest extends UnitTestCase {
    * @covers ::warmup
    */
   public function testWarmupSaveEmptyOcr(): void {
+    $file_storage = $this->createMock(EntityStorageInterface::class);
+    $this->entityTypeManager->expects(self::once())
+      ->method('getStorage')
+      ->with('file')
+      ->willReturn($file_storage);
+
     $query = $this->createMock(QueryInterface::class);
     $query->expects($this->once())
       ->method('accessCheck')
@@ -445,7 +470,7 @@ final class OcrLocalFileCacheWarmupTest extends UnitTestCase {
       ->method('range')
       ->with(0, 100);
 
-    $this->fileStorage->expects(self::once())
+    $file_storage->expects(self::once())
       ->method('getQuery')
       ->willReturn($query);
 
@@ -467,7 +492,7 @@ final class OcrLocalFileCacheWarmupTest extends UnitTestCase {
       ->method('id')
       ->willReturn(2039);
 
-    $this->fileStorage->expects($this->exactly(2))
+    $file_storage->expects($this->exactly(2))
       ->method('load')
       ->willReturnMap([
         [200, $file200],
@@ -508,6 +533,12 @@ final class OcrLocalFileCacheWarmupTest extends UnitTestCase {
    * @covers ::warmup
    */
   public function testWarmupNoSaveEmptyOcr(): void {
+    $file_storage = $this->createMock(EntityStorageInterface::class);
+    $this->entityTypeManager->expects(self::once())
+      ->method('getStorage')
+      ->with('file')
+      ->willReturn($file_storage);
+
     $query = $this->createMock(QueryInterface::class);
     $query->expects($this->once())
       ->method('accessCheck')
@@ -532,7 +563,7 @@ final class OcrLocalFileCacheWarmupTest extends UnitTestCase {
       ->method('range')
       ->with(0, 100);
 
-    $this->fileStorage->expects(self::once())
+    $file_storage->expects(self::once())
       ->method('getQuery')
       ->willReturn($query);
 
@@ -554,7 +585,7 @@ final class OcrLocalFileCacheWarmupTest extends UnitTestCase {
       ->method('id')
       ->willReturn(2039);
 
-    $this->fileStorage->expects($this->exactly(2))
+    $file_storage->expects($this->exactly(2))
       ->method('load')
       ->willReturnMap([
         [200, $file200],

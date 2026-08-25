@@ -30,11 +30,11 @@ class OcrLocalFileCacheWarmup extends DrushCommands {
   protected $connection;
 
   /**
-   * The file storage service.
+   * The entity type manager.
    *
-   * @var \Drupal\Core\Entity\EntityStorageInterface
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  protected $fileStorage;
+  protected $entityTypeManager;
 
   /**
    * The File to text service.
@@ -55,7 +55,7 @@ class OcrLocalFileCacheWarmup extends DrushCommands {
    */
   public function __construct(Connection $connection, EntityTypeManagerInterface $entity_type_manager, FileToText $file_to_text, StorageInterface $local_storage) {
     $this->connection = $connection;
-    $this->fileStorage = $entity_type_manager->getStorage('file');
+    $this->entityTypeManager = $entity_type_manager;
     $this->fileToText = $file_to_text;
     $this->localFileStorage = $local_storage;
   }
@@ -143,7 +143,9 @@ class OcrLocalFileCacheWarmup extends DrushCommands {
     // @see \Drupal\entity_to_text_tika\Extractor\FileToText::getClient().
     $this->connection->query('SET wait_timeout = 70');
 
-    $query = $this->fileStorage->getQuery();
+    $file_storage = $this->entityTypeManager->getStorage('file');
+
+    $query = $file_storage->getQuery();
     $query->accessCheck(FALSE);
     if ($fid) {
       $query->condition('fid', $fid);
@@ -174,7 +176,7 @@ class OcrLocalFileCacheWarmup extends DrushCommands {
         $files = $base_query->execute();
 
         foreach ($files as $fid) {
-          $file = $this->fileStorage->load($fid);
+          $file = $file_storage->load($fid);
 
           $this->output()->writeln(sprintf('Processing file (%s) "%s".', $file->id(), $file->getFileUri()), OutputInterface::VERBOSITY_VERBOSE);
 
