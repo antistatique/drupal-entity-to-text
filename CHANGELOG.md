@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - ci(phpcs): exclude generated gitlab_templates_version.txt
 
+### Added
+- build: allow composer pluign symfony/runtime
+
 ## [1.3.2] - 2026-06-08
 ### Changed
 - refactor(hook): use new hook runtime and mark the old one as legacy
