@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - ci(gitlab-ci): strip PHPUnit attributes for phpstan on previous major and refresh Drupal versions in comments
 - docs(readme): fix supported Drupal versions
 - refactor(hook): use the RequirementSeverity enum with a backward compatible call
+- refactor(php): use constructor property promotion
 - test(phpunit): add Group and RunTestsInSeparateProcesses attributes
 
 ### Fixed

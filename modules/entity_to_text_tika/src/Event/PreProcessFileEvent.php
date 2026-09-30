@@ -14,20 +14,6 @@ use Vaites\ApacheTika\Client;
 class PreProcessFileEvent extends Event {
 
   /**
-   * The Apache Tika client.
-   *
-   * @var \Vaites\ApacheTika\Client
-   */
-  protected $client;
-
-  /**
-   * The Drupal file to be processed by Tika OCR.
-   *
-   * @var \Drupal\file\Entity\File
-   */
-  protected $file;
-
-  /**
    * Constructs a PreProcessFileEvent object.
    *
    * @param \Vaites\ApacheTika\Client $client
@@ -35,9 +21,7 @@ class PreProcessFileEvent extends Event {
    * @param \Drupal\file\Entity\File $file
    *   The Drupal file to be processed by Tika OCR.
    */
-  public function __construct(Client $client, File $file) {
-    $this->client = $client;
-    $this->file = $file;
+  public function __construct(protected Client $client, protected File $file) {
   }
 
   /**

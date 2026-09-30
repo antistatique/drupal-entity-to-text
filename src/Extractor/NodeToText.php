@@ -14,33 +14,20 @@ use Drupal\node\NodeInterface;
 class NodeToText {
 
   /**
-   * The HTML Purifier service.
-   *
-   * @var \Drupal\entity_to_text\HtmlPurifier
-   */
-  protected $htmlPurifier;
-
-  /**
-   * The renderer service.
-   *
-   * @var \Drupal\Core\Render\RendererInterface
-   */
-  protected $renderer;
-
-  /**
-   * The field type manager to define field.
-   *
-   * @var \Drupal\Core\Field\FieldTypePluginManagerInterface
-   */
-  protected $fieldTypeManager;
-
-  /**
    * Construct a new NodeToText object.
+   *
+   * @param \Drupal\entity_to_text\HtmlPurifier $htmlPurifier
+   *   The HTML Purifier service.
+   * @param \Drupal\Core\Render\RendererInterface $renderer
+   *   The renderer service.
+   * @param \Drupal\Core\Field\FieldTypePluginManagerInterface $fieldTypeManager
+   *   The field type manager to define field.
    */
-  public function __construct(HtmlPurifier $html_purifier, RendererInterface $renderer, FieldTypePluginManagerInterface $field_type_manager) {
-    $this->htmlPurifier = $html_purifier;
-    $this->renderer = $renderer;
-    $this->fieldTypeManager = $field_type_manager;
+  public function __construct(
+    protected HtmlPurifier $htmlPurifier,
+    protected RendererInterface $renderer,
+    protected FieldTypePluginManagerInterface $fieldTypeManager,
+  ) {
   }
 
   /**

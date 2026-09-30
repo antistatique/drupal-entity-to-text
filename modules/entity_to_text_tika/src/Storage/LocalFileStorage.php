@@ -16,13 +16,6 @@ class LocalFileStorage implements StorageInterface {
   public const DESTINATION = 'private://entity-to-text/ocr';
 
   /**
-   * The file system service.
-   *
-   * @var \Drupal\Core\File\FileSystemInterface
-   */
-  protected $fileSystem;
-
-  /**
    * The logger service.
    *
    * @var \Drupal\Core\Logger\LoggerChannelInterface
@@ -30,19 +23,21 @@ class LocalFileStorage implements StorageInterface {
   protected $logger;
 
   /**
-   * The stream wrapper manager.
-   *
-   * @var \Drupal\Core\StreamWrapper\StreamWrapperManagerInterface
-   */
-  protected $streamWrapperManager;
-
-  /**
    * Construct a new LocalFileStorage object.
+   *
+   * @param \Drupal\Core\File\FileSystemInterface $fileSystem
+   *   The file system service.
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
+   *   The logger factory service.
+   * @param \Drupal\Core\StreamWrapper\StreamWrapperManagerInterface $streamWrapperManager
+   *   The stream wrapper manager.
    */
-  public function __construct(FileSystemInterface $file_system, LoggerChannelFactoryInterface $logger_factory, StreamWrapperManagerInterface $stream_wrapper_manager) {
-    $this->fileSystem = $file_system;
+  public function __construct(
+    protected FileSystemInterface $fileSystem,
+    LoggerChannelFactoryInterface $logger_factory,
+    protected StreamWrapperManagerInterface $streamWrapperManager,
+  ) {
     $this->logger = $logger_factory->get('entity_to_text_tika');
-    $this->streamWrapperManager = $stream_wrapper_manager;
   }
 
   /**

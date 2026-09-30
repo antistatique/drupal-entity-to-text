@@ -13,33 +13,20 @@ use Drupal\entity_to_text\HtmlPurifier;
 class ParagraphsToText {
 
   /**
-   * The HTML Purifier service.
-   *
-   * @var \Drupal\entity_to_text\HtmlPurifier
-   */
-  protected $htmlPurifier;
-
-  /**
-   * The renderer service.
-   *
-   * @var \Drupal\Core\Render\RendererInterface
-   */
-  protected $renderer;
-
-  /**
-   * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
    * Construct a new ParagraphsToText object.
+   *
+   * @param \Drupal\entity_to_text\HtmlPurifier $htmlPurifier
+   *   The HTML Purifier service.
+   * @param \Drupal\Core\Render\RendererInterface $renderer
+   *   The renderer service.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
+   *   The entity type manager.
    */
-  public function __construct(HtmlPurifier $html_purifier, RendererInterface $renderer, EntityTypeManagerInterface $entity_type_manager) {
-    $this->htmlPurifier = $html_purifier;
-    $this->renderer = $renderer;
-    $this->entityTypeManager = $entity_type_manager;
+  public function __construct(
+    protected HtmlPurifier $htmlPurifier,
+    protected RendererInterface $renderer,
+    protected EntityTypeManagerInterface $entityTypeManager,
+  ) {
   }
 
   /**

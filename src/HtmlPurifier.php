@@ -20,17 +20,12 @@ class HtmlPurifier {
   protected const HTMLPURIFIER_CACHE_NAME = 'HtmlPurifier';
 
   /**
-   * The file system service.
-   *
-   * @var \Drupal\Core\File\FileSystemInterface
-   */
-  protected $fileSystem;
-
-  /**
    * Construct a new HtmlPurifier object.
+   *
+   * @param \Drupal\Core\File\FileSystemInterface $fileSystem
+   *   The file system service.
    */
-  public function __construct(FileSystemInterface $file_system) {
-    $this->fileSystem = $file_system;
+  public function __construct(protected FileSystemInterface $fileSystem) {
   }
 
   /**

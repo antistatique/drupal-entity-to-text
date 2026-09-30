@@ -23,41 +23,23 @@ class OcrLocalFileCacheWarmup extends DrushCommands {
   public const LIMIT_PAGER = 100;
 
   /**
-   * The database connection.
-   *
-   * @var \Drupal\Core\Database\Connection
-   */
-  protected $connection;
-
-  /**
-   * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
-   * The File to text service.
-   *
-   * @var \Drupal\entity_to_text_tika\Extractor\FileToText
-   */
-  protected $fileToText;
-
-  /**
-   * The Plain-text storage cache processor.
-   *
-   * @var \Drupal\entity_to_text_tika\Storage\StorageInterface
-   */
-  protected $localFileStorage;
-
-  /**
    * Warmup OCR caches for Tika constructor.
+   *
+   * @param \Drupal\Core\Database\Connection $connection
+   *   The database connection.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
+   *   The entity type manager.
+   * @param \Drupal\entity_to_text_tika\Extractor\FileToText $fileToText
+   *   The File to text service.
+   * @param \Drupal\entity_to_text_tika\Storage\StorageInterface $localFileStorage
+   *   The Plain-text storage cache processor.
    */
-  public function __construct(Connection $connection, EntityTypeManagerInterface $entity_type_manager, FileToText $file_to_text, StorageInterface $local_storage) {
-    $this->connection = $connection;
-    $this->entityTypeManager = $entity_type_manager;
-    $this->fileToText = $file_to_text;
-    $this->localFileStorage = $local_storage;
+  public function __construct(
+    protected Connection $connection,
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected FileToText $fileToText,
+    protected StorageInterface $localFileStorage,
+  ) {
   }
 
   /**

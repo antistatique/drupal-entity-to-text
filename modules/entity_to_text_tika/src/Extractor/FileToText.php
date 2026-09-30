@@ -17,20 +17,6 @@ use Vaites\ApacheTika\Client;
 class FileToText {
 
   /**
-   * The site settings.
-   *
-   * @var \Drupal\Core\Site\Settings
-   */
-  protected $settings;
-
-  /**
-   * The file system service.
-   *
-   * @var \Drupal\Core\File\FileSystemInterface
-   */
-  protected $fileSystem;
-
-  /**
    * The logger service.
    *
    * @var \Drupal\Core\Logger\LoggerChannelInterface
@@ -45,21 +31,25 @@ class FileToText {
   protected $client;
 
   /**
-   * The event dispatcher.
-   *
-   * @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface
-   */
-  private $eventDispatcher;
-
-  /**
    * Construct a new FileToText object.
+   *
+   * @param \Drupal\Core\Site\Settings $settings
+   *   The site settings.
+   * @param \Drupal\Core\File\FileSystemInterface $fileSystem
+   *   The file system service.
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
+   *   The logger factory service.
+   * @param \Symfony\Contracts\EventDispatcher\EventDispatcherInterface $eventDispatcher
+   *   The event dispatcher.
    */
-  public function __construct(Settings $settings, FileSystemInterface $file_system, LoggerChannelFactoryInterface $logger_factory, EventDispatcherInterface $event_dispatcher) {
-    $this->settings = $settings;
-    $this->fileSystem = $file_system;
+  public function __construct(
+    protected Settings $settings,
+    protected FileSystemInterface $fileSystem,
+    LoggerChannelFactoryInterface $logger_factory,
+    private EventDispatcherInterface $eventDispatcher,
+  ) {
     $this->logger = $logger_factory->get('entity_to_text');
     $this->client = NULL;
-    $this->eventDispatcher = $event_dispatcher;
   }
 
   /**
