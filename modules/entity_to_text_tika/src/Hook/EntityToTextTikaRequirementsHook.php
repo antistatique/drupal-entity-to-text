@@ -2,6 +2,8 @@
 
 namespace Drupal\entity_to_text_tika\Hook;
 
+use Drupal\Component\Utility\DeprecationHelper;
+use Drupal\Core\Extension\Requirement\RequirementSeverity;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\StreamWrapper\StreamWrapperManagerInterface;
@@ -33,14 +35,14 @@ final class EntityToTextTikaRequirementsHook {
     if (!$this->streamWrapperManager->isValidScheme('private')) {
       $requirements['entity_to_text_tika_private']['value'] = 'Private file system is not set.';
       $requirements['entity_to_text_tika_private']['description'] = $this->t('Entity to Text Tika expose a Local File Storage optimisation in order to store OCR of document in the private:// schema. The current private schema configuration cannot leverage it.');
-      $requirements['entity_to_text_tika_private']['severity'] = REQUIREMENT_INFO;
+      $requirements['entity_to_text_tika_private']['severity'] = DeprecationHelper::backwardsCompatibleCall(\Drupal::VERSION, '11.2.0', fn() => RequirementSeverity::Info, fn() => REQUIREMENT_INFO);
     }
 
     $private_path = $this->fileSystem->realpath('private://');
     // Check if the private file stream wrapper is ready to use.
     if (!is_dir($private_path) || !is_writable($private_path)) {
       $requirements['entity_to_text_tika_private']['value'] = $this->t('Entity to Text Tika expose a Local File Storage optimisation in order to store OCR of document in the private:// schema. The current private schema configuration cannot leverage it. The resolved private directory %directory% seems not writable.', ['%directory%' => $private_path]);
-      $requirements['entity_to_text_tika_private']['severity'] = REQUIREMENT_ERROR;
+      $requirements['entity_to_text_tika_private']['severity'] = DeprecationHelper::backwardsCompatibleCall(\Drupal::VERSION, '11.2.0', fn() => RequirementSeverity::Error, fn() => REQUIREMENT_ERROR);
     }
 
     return $requirements;

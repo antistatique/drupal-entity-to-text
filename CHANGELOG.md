@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - build(docker): use Drupal 11.3 as default base image
 - ci(gitlab-ci): strip PHPUnit attributes for phpstan on previous major and refresh Drupal versions in comments
 - docs(readme): fix supported Drupal versions
+- refactor(hook): use the RequirementSeverity enum with a backward compatible call
 - test(phpunit): add Group and RunTestsInSeparateProcesses attributes
 
 ### Fixed
