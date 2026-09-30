@@ -72,7 +72,7 @@ final class NodeToTextTest extends UnitTestCase {
     $this->renderer = $this->prophet->prophesize(RendererInterface::class);
     $this->fieldTypeManager = $this->prophet->prophesize(FieldTypePluginManagerInterface::class);
 
-    $this->nodeToText = new NodetoText($this->htmlPurifier->reveal(), $this->renderer->reveal(), $this->fieldTypeManager->reveal());
+    $this->nodeToText = new NodeToText($this->htmlPurifier->reveal(), $this->renderer->reveal(), $this->fieldTypeManager->reveal());
   }
 
   /**

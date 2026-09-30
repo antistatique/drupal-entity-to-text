@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Fixed
 - fix(cspell): add codesniffer to the project dictionary
+- fix(phpstan): use the correct case of the NodeToText class name in NodeToTextTest
 
 ### Changed
 - test(phpunit): add Group and RunTestsInSeparateProcesses attributes
