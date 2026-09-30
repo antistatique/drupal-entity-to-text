@@ -30,17 +30,24 @@ include:
 ################
 variables:
   SKIP_ESLINT: '1'
-  # Opt in to testing current minor against max supported PHP version.
+  # Opt in to testing current minor against max supported PHP version (8.4).
   OPT_IN_TEST_MAX_PHP: '1'
-  # Opt in to testing previous minor (Drupal 11.1.x).
+  # Opt in to testing previous minor (Drupal 11.3.x).
   OPT_IN_TEST_PREVIOUS_MINOR: '1'
-  # Opt in to testing next minor (Drupal 11.3.x).
+  # Opt in to testing next minor (Drupal 11.x-dev // 11.5-dev).
   OPT_IN_TEST_NEXT_MINOR: '1'
-  # Opt in to testing $CORE_PREVIOUS_MAJOR (Drupal 10.4.x).
+  # Opt in to testing $CORE_PREVIOUS_MAJOR (Drupal 10.6.x).
   OPT_IN_TEST_PREVIOUS_MAJOR: '1'
-  # Opt in to testing $CORE_MAJOR_DEVELOPMENT (Drupal 12).
+  # Opt in to testing $CORE_MAJOR_DEVELOPMENT (Drupal 12.0-dev).
   OPT_IN_TEST_NEXT_MAJOR: '0'
 
 # This module wants to strictly comply with Drupal's coding standards.
 phpcs:
   allow_failure: false
+
+phpstan (previous major):
+  before_script:
+    - find $DRUPAL_PROJECT_FOLDER/tests/src $DRUPAL_PROJECT_FOLDER/modules/*/tests/src -name '*.php' -exec sed -i '/^[[:space:]]*#\[Group(/d' {} +
+    - find $DRUPAL_PROJECT_FOLDER/tests/src $DRUPAL_PROJECT_FOLDER/modules/*/tests/src -name '*.php' -exec sed -i '/^[[:space:]]*#\[RunTestsInSeparateProcesses/d' {} +
+    - find $DRUPAL_PROJECT_FOLDER/tests/src $DRUPAL_PROJECT_FOLDER/modules/*/tests/src -name '*.php' -exec sed -i '/^[[:space:]]*#\[CoversClass(/d' {} +
+    - find $DRUPAL_PROJECT_FOLDER/tests/src $DRUPAL_PROJECT_FOLDER/modules/*/tests/src -name '*.php' -exec sed -i '/^[[:space:]]*#\[CoversMethod(/d' {} +

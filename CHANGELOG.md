@@ -7,12 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Changed
 - build(docker): use Drupal 11.3 as default base image
+- ci(gitlab-ci): strip PHPUnit attributes for phpstan on previous major and refresh Drupal versions in comments
+- test(phpunit): add Group and RunTestsInSeparateProcesses attributes
+
 ### Fixed
 - fix(cspell): add codesniffer to the project dictionary
 - fix(phpstan): use the correct case of the NodeToText class name in NodeToTextTest
-
-### Changed
-- test(phpunit): add Group and RunTestsInSeparateProcesses attributes
 
 ## [1.3.3] - 2026-08-25
 ### Fixed
