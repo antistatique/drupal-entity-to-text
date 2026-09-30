@@ -7,6 +7,8 @@ use Drupal\entity_to_text_tika\Storage\LocalFileStorage;
 use Drupal\file\Entity\File;
 use Drupal\KernelTests\Core\File\FileTestBase;
 use Drupal\Core\File\FileExists;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the Plaintext File Storage.
@@ -18,6 +20,9 @@ use Drupal\Core\File\FileExists;
  *
  * @internal
  */
+#[Group('entity_to_text')]
+#[Group('entity_to_text_tika')]
+#[RunTestsInSeparateProcesses]
 final class LocalFileStorageTest extends FileTestBase {
 
   /**

@@ -3,6 +3,8 @@
 namespace Drupal\Tests\entity_to_text_tika\Functional;
 
 use Drupal\Tests\system\Functional\Module\ModuleTestBase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests install / uninstall of module.
@@ -12,6 +14,11 @@ use Drupal\Tests\system\Functional\Module\ModuleTestBase;
  * @group entity_to_text_functional
  * @group entity_to_text_tika_functional
  */
+#[Group('entity_to_text')]
+#[Group('entity_to_text_tika')]
+#[Group('entity_to_text_functional')]
+#[Group('entity_to_text_tika_functional')]
+#[RunTestsInSeparateProcesses]
 class InstallUninstallTest extends ModuleTestBase {
 
   /**

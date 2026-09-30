@@ -10,6 +10,7 @@ use Drupal\entity_to_text_tika\Event\PreProcessFileEvent;
 use Drupal\entity_to_text_tika\Extractor\FileToText;
 use Drupal\file\Entity\File;
 use Drupal\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\Group;
 use Prophecy\Prophet;
 use Psr\Log\LoggerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -25,6 +26,8 @@ use Vaites\ApacheTika\Clients\WebClient;
  *
  * @internal
  */
+#[Group('entity_to_text')]
+#[Group('entity_to_text_tika')]
 final class FileToTextTest extends UnitTestCase {
 
   /**

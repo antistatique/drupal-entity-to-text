@@ -11,6 +11,7 @@ use Drupal\entity_to_text\Extractor\NodeToText;
 use Drupal\entity_to_text\HtmlPurifier;
 use Drupal\node\NodeInterface;
 use Drupal\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\Group;
 use Prophecy\Prophet;
 
 /**
@@ -22,6 +23,7 @@ use Prophecy\Prophet;
  *
  * @internal
  */
+#[Group('entity_to_text')]
 final class NodeToTextTest extends UnitTestCase {
 
   /**

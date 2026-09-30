@@ -5,6 +5,7 @@ namespace Drupal\Tests\entity_to_text\Unit;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\entity_to_text\HtmlPurifier;
 use Drupal\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests HTML Purifier.
@@ -15,6 +16,7 @@ use Drupal\Tests\UnitTestCase;
  *
  * @internal
  */
+#[Group('entity_to_text')]
 final class HtmlPurifierTest extends UnitTestCase {
 
   /**

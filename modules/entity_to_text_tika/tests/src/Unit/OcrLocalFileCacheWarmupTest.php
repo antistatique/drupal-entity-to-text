@@ -11,6 +11,7 @@ use Drupal\entity_to_text_tika\Extractor\FileToText;
 use Drupal\entity_to_text_tika\Storage\StorageInterface;
 use Drupal\file\Entity\File;
 use Drupal\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\Console\Formatter\OutputFormatterInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -23,6 +24,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @internal
  */
+#[Group('entity_to_text')]
+#[Group('entity_to_text_tika')]
 final class OcrLocalFileCacheWarmupTest extends UnitTestCase {
 
   /**

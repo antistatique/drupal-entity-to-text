@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - fix(cspell): add codesniffer to the project dictionary
 
+### Changed
+- test(phpunit): add Group and RunTestsInSeparateProcesses attributes
+
 ## [1.3.3] - 2026-08-25
 ### Fixed
 - ci(phpstan): don't store the file entity storage as a class property

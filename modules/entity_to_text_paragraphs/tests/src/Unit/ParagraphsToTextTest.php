@@ -11,6 +11,7 @@ use Drupal\entity_to_text\HtmlPurifier;
 use Drupal\entity_to_text_paragraphs\Extractor\ParagraphsToText;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\Group;
 use Prophecy\Prophecy\ObjectProphecy;
 use Prophecy\Prophet;
 
@@ -26,6 +27,8 @@ use Prophecy\Prophet;
  *
  * @internal
  */
+#[Group('entity_to_text')]
+#[Group('entity_to_text_paragraphs')]
 final class ParagraphsToTextTest extends UnitTestCase {
 
   /**

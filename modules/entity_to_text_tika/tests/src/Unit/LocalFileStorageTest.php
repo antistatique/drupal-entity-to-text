@@ -9,6 +9,7 @@ use Drupal\entity_to_text_tika\Storage\LocalFileStorage;
 use Drupal\file\Entity\File;
 use Drupal\Tests\TestFileCreationTrait;
 use Drupal\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\Group;
 use Prophecy\Argument;
 use Prophecy\Prophet;
 use Psr\Log\LoggerInterface;
@@ -23,6 +24,8 @@ use Psr\Log\LoggerInterface;
  *
  * @internal
  */
+#[Group('entity_to_text')]
+#[Group('entity_to_text_tika')]
 final class LocalFileStorageTest extends UnitTestCase {
   use TestFileCreationTrait;
 

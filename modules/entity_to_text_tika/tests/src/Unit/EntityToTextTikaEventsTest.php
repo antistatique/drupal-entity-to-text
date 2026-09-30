@@ -4,6 +4,7 @@ namespace Drupal\Tests\entity_to_text_tika\Unit;
 
 use Drupal\entity_to_text_tika\Event\EntityToTextTikaEvents;
 use Drupal\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * @coversDefaultClass \Drupal\entity_to_text_tika\Event\EntityToTextTikaEvents
@@ -11,6 +12,8 @@ use Drupal\Tests\UnitTestCase;
  * @group entity_to_text
  * @group entity_to_text_tika
  */
+#[Group('entity_to_text')]
+#[Group('entity_to_text_tika')]
 class EntityToTextTikaEventsTest extends UnitTestCase {
 
   /**

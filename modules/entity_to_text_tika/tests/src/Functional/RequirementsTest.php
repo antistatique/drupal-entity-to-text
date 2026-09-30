@@ -3,6 +3,8 @@
 namespace Drupal\Tests\entity_to_text_tika\Functional;
 
 use Drupal\Tests\BrowserTestBase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests module requirements.
@@ -12,6 +14,11 @@ use Drupal\Tests\BrowserTestBase;
  * @group entity_to_text_functional
  * @group entity_to_text_tika_functional
  */
+#[Group('entity_to_text')]
+#[Group('entity_to_text_tika')]
+#[Group('entity_to_text_functional')]
+#[Group('entity_to_text_tika_functional')]
+#[RunTestsInSeparateProcesses]
 class RequirementsTest extends BrowserTestBase {
 
   /**
