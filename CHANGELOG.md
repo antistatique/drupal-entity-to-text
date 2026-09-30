@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Changed
+- build(docker): use Drupal 11.3 as default base image
 ### Fixed
 - fix(cspell): add codesniffer to the project dictionary
 - fix(phpstan): use the correct case of the NodeToText class name in NodeToTextTest
