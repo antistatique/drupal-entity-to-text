@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [1.3.4 - 2026-10-15]
 ### Changed
 - build(docker): use Drupal 11.3 as default base image
 - ci(gitlab-ci): strip PHPUnit attributes for phpstan on previous major and refresh Drupal versions in comments
@@ -94,7 +96,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 - remove satackey/action-docker-layer-caching on Github Actions
 
-[Unreleased]: https://github.com/antistatique/drupal-entity-to-text/compare/1.3.3...HEAD
+[Unreleased]: https://github.com/antistatique/drupal-entity-to-text/compare/1.3.4...HEAD
+[1.3.4]: https://github.com/antistatique/drupal-entity-to-text/compare/1.3.3...1.3.4
 [1.3.3]: https://github.com/antistatique/drupal-entity-to-text/compare/1.3.2...1.3.3
 [1.3.2]: https://github.com/antistatique/drupal-entity-to-text/compare/1.3.1...1.3.2
 [1.3.1]: https://github.com/antistatique/drupal-entity-to-text/compare/1.3.0...1.3.1
