@@ -89,7 +89,7 @@ https://github.com/phpmd/phpmd
 Detect overcomplicated expressions & Unused parameters, methods, properties.
 
   ```
-  $ docker compose exec dev phpmd ./web/modules/custom text ./phpmd.xml \
+  $ docker compose exec dev phpmd analyze ./web/modules/custom --ruleset ./phpmd.xml \
   --suffixes php,module,inc,install,test,profile,theme,css,info,txt --exclude *Test.php,*vendor/*
   ```
 
@@ -99,7 +99,7 @@ Detect overcomplicated expressions & Unused parameters, methods, properties.
   ```
 
   ```
-  $ docker compose exec dev phpmd ./behat text ./phpmd.xml -suffixes php
+  $ docker compose exec dev phpmd analyze ./behat --ruleset ./phpmd.xml -suffixes php
   ```
 
 #### Running PHP Copy/Paste Detector
