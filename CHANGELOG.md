@@ -5,10 +5,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Removed
+- ci: remove PhpDeprecationDetector (phpdd) job, tool and docs
+
 ### Fixed
 - fix(ci): use the PHPMD 3 `analyze` command
 
-## [1.3.4 - 2026-10-15]
+## [1.3.4] - 2026-10-15
 ### Changed
 - build(docker): use Drupal 11.3 as default base image
 - ci(gitlab-ci): strip PHPUnit attributes for phpstan on previous major and refresh Drupal versions in comments
