@@ -13,7 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Drush Command to Warmup the Tika OCR Local File Cache.
  */
-class OcrLocalFileCacheWarmup extends DrushCommands {
+final class OcrLocalFileCacheWarmup extends DrushCommands {
 
   /**
    * The number of object processed by pages.
