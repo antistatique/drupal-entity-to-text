@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - refactor: mark the Drush command class final
+- ci: test Drupal 11.4 as a stable version
+- build(docker): use Drupal 11.4 as default base image
+- ci: run Upgrade Status on Drupal 11.4
 
 ### Removed
 - ci: remove PhpDeprecationDetector (phpdd) job, tool and docs
