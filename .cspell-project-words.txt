@@ -12,17 +12,14 @@ interesed
 libbz
 Nodeto
 passowrd
-phpcf
 PHPCPD
 phpcpd
-phpdd
 phplint
 reseting
 rulesets
 unusedcode
 Vaites
 vaites
-wapmorgan
 Wenger
 wengerk
 cound

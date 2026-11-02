@@ -54,7 +54,6 @@ The following Analyzer will be downloaded & installed as PHAR:
 
 - `phpmd/phpmd`
 - `sebastian/phpcpd`
-- `wapmorgan/PhpDeprecationDetector`
 - `vimeo/psalm`
 
 ### Command Line Usage
@@ -114,13 +113,3 @@ https://github.com/sebastianbergmann/phpcpd
 --exclude tests --exclude vendor/ --ansi
   ```
 
-#### Running PhpDeprecationDetector
-
-https://github.com/wapmorgan/PhpDeprecationDetector
-
-A scanner that checks compatibility of your code with PHP interpreter versions.
-
-  ```
-  $ docker compose exec dev phpdd ./web/modules/custom ./behat \
-    --file-extensions php,module,inc,install,test,profile,theme,info --exclude vendor
-  ```
